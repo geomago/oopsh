@@ -1,11 +1,20 @@
 # -*- encoding: utf-8 -*-
 
+import os
 import sys
 from .conf import settings
 from .exceptions import NoRuleMatched
 from .system import get_key
 from .utils import get_alias
 from . import logs, const
+
+
+def _is_interactive():
+    """Returns `True` when stdin is a terminal we can read keys from."""
+    try:
+        return os.isatty(sys.stdin.fileno())
+    except (AttributeError, ValueError, OSError):
+        return False
 
 
 def read_actions():
@@ -77,6 +86,13 @@ def select_command(corrected_commands):
     if not settings.require_confirmation:
         logs.show_corrected_command(selector.value)
         return selector.value
+
+    if not _is_interactive():
+        # Never run a fix the user couldn't confirm
+        logs.show_corrected_command(selector.value)
+        logs.failed("Can't ask for confirmation: stdin is not a terminal. "
+                    "Run with --yes to execute the fix.")
+        return
 
     logs.confirm_text(selector.value)
 

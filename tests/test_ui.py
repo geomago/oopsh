@@ -52,6 +52,10 @@ def test_command_selector():
 
 @pytest.mark.usefixtures('no_colors')
 class TestSelectCommand(object):
+    @pytest.fixture(autouse=True)
+    def interactive(self, mocker):
+        return mocker.patch('oopsh.ui._is_interactive', return_value=True)
+
     @pytest.fixture
     def commands_with_side_effect(self):
         return [CorrectedCommand('ls', lambda *_: None, 100),
@@ -65,6 +69,19 @@ class TestSelectCommand(object):
     def test_without_commands(self, capsys):
         assert ui.select_command(iter([])) is None
         assert capsys.readouterr() == ('', 'Nothing found\n')
+
+    def test_not_interactive(self, capsys, commands, interactive):
+        interactive.return_value = False
+        assert ui.select_command(iter(commands)) is None
+        stderr = capsys.readouterr()[1]
+        assert stderr.startswith(const.USER_COMMAND_MARK + 'ls\n')
+        assert 'stdin is not a terminal' in stderr
+
+    def test_not_interactive_without_confirmation(self, capsys, commands,
+                                                  interactive, settings):
+        interactive.return_value = False
+        settings.require_confirmation = False
+        assert ui.select_command(iter(commands)) == commands[0]
 
     def test_without_confirmation(self, capsys, commands, settings):
         settings.require_confirmation = False
