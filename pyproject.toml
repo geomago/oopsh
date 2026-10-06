@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "thefuck"
+version = "3.32"
+description = "Magnificent app which corrects your previous console command"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE.md"]
+authors = [{ name = "Vladimir Iakovlev", email = "nvbn.rm@gmail.com" }]
+requires-python = ">=3.10"
+dependencies = ["colorama", "decorator", "psutil", "pyte"]
+classifiers = [
+    "Environment :: Console",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: System :: Shells",
+    "Topic :: Utilities",
+]
+
+[project.urls]
+Homepage = "https://github.com/geomago/oopsh"
+Issues = "https://github.com/geomago/oopsh/issues"
+
+[project.scripts]
+thefuck = "thefuck.entrypoints.main:main"
+fuck = "thefuck.entrypoints.not_configured:main"
+
+[dependency-groups]
+test = [
+    "pexpect",
+    "pytest",
+    "pytest-benchmark",
+    "pytest-docker-pexpect",
+    "pytest-mock",
+]
+lint = ["flake8"]
+dev = [{ include-group = "test" }, { include-group = "lint" }]
+
+[tool.setuptools.packages.find]
+include = ["thefuck*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

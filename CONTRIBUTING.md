@@ -38,9 +38,10 @@ In order to develop locally, there are two options:
 Install `The Fuck` for development:
 
 ```bash
-pip install -r requirements.txt
-python setup.py develop
+pip install -e . --group dev
 ```
+
+(`--group` needs pip 25.1 or later.)
 
 Run code style checks:
 
@@ -58,13 +59,6 @@ Run unit and functional tests (requires docker):
 
 ```bash
 pytest --enable-functional
-```
-
-For sending package to pypi:
-
-```bash
-sudo apt-get install pandoc
-./release.py
 ```
 
 ## Develop using Dev Container
