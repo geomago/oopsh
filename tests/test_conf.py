@@ -131,7 +131,7 @@ class TestInitializeSettingsFile(object):
     (['xdg/thefuck', 'home/.thefuck'], 'xdg', 'xdg/thefuck', False)])
 def test_get_user_dir_path(tmp_path, os_environ, settings, existing,
                            xdg_config_home, result, warns):
-    os_environ['HOME'] = str(tmp_path / 'home')
+    os_environ['HOME'] = os_environ['USERPROFILE'] = str(tmp_path / 'home')
     if xdg_config_home is not None:
         os_environ['XDG_CONFIG_HOME'] = str(tmp_path / xdg_config_home)
     for path in existing:

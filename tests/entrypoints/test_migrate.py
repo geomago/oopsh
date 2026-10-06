@@ -5,7 +5,7 @@ from oopsh.shells.generic import ShellConfiguration
 
 @pytest.fixture
 def home(tmp_path, os_environ):
-    os_environ['HOME'] = str(tmp_path)
+    os_environ['HOME'] = os_environ['USERPROFILE'] = str(tmp_path)
     os_environ.pop('XDG_CONFIG_HOME', None)
     return tmp_path
 

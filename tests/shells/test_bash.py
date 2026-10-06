@@ -3,6 +3,7 @@
 import os
 import shutil
 import subprocess
+import sys
 import pytest
 from oopsh.shells import Bash
 
@@ -70,7 +71,8 @@ class TestBash(object):
         assert '*' not in alias.replace('${1%%=*}', '')
         assert '?' not in alias and '[' not in alias.replace('[ ', '')
 
-    @pytest.mark.skipif(shutil.which('bash') is None, reason='needs bash')
+    @pytest.mark.skipif(shutil.which('bash') is None or sys.platform == 'win32',
+                        reason='needs a POSIX bash')
     @pytest.mark.parametrize('alias_name', ['oops', 'oopsh'])
     def test_alias_is_valid_unquoted(self, shell, alias_name):
         """`eval $(oopsh --alias)` joins the alias on one line."""
