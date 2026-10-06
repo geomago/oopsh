@@ -8,7 +8,9 @@ from oopsh.types import Command
     Command('cd foo/bar/baz',
             'cd: foo: No such file or directory'),
     Command('cd foo/bar/baz', 'cd: can\'t cd to foo/bar/baz'),
-    Command('cd /foo/bar/', 'cd: The directory "/foo/bar/" does not exist')])
+    Command('cd /foo/bar/', 'cd: The directory "/foo/bar/" does not exist'),
+    Command('cd foo', "Set-Location: Cannot find path 'C:\\foo' because it does not exist."),
+    Command('cd foo', 'The system cannot find the path specified.')])
 def test_match(command):
     assert match(command)
 
