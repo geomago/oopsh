@@ -102,7 +102,16 @@ class Fish(Generic):
             return command_script
 
     def _get_history_file_name(self):
-        return os.path.expanduser('~/.config/fish/fish_history')
+        # fish 2.3+ keeps its history in $XDG_DATA_HOME, older versions in
+        # ~/.config/fish
+        home = os.path.expanduser('~')
+        data_home = os.environ.get('XDG_DATA_HOME',
+                                   os.path.join(home, '.local', 'share'))
+        history = os.path.join(data_home, 'fish', 'fish_history')
+        legacy_history = os.path.join(home, '.config', 'fish', 'fish_history')
+        if not os.path.isfile(history) and os.path.isfile(legacy_history):
+            return legacy_history
+        return history
 
     def _get_history_line(self, command_script):
         return u'- cmd: {}\n   when: {}\n'.format(command_script, int(time()))

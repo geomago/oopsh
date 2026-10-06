@@ -143,3 +143,24 @@ class TestFish(object):
         with pytest.raises(exception):
             shell._get_version()
         assert Popen.call_args[0][0] == ['fish', '--version']
+
+
+class TestFishHistoryFile(object):
+    @pytest.fixture
+    def home(self, tmp_path, os_environ):
+        os_environ['HOME'] = os_environ['USERPROFILE'] = str(tmp_path)
+        return tmp_path
+
+    def test_xdg_data_home(self, home, os_environ):
+        os_environ['XDG_DATA_HOME'] = str(home / 'data')
+        assert Fish()._get_history_file_name() == str(home / 'data' / 'fish' / 'fish_history')
+
+    def test_default(self, home):
+        assert Fish()._get_history_file_name() == str(
+            home / '.local' / 'share' / 'fish' / 'fish_history')
+
+    def test_legacy(self, home):
+        legacy = home / '.config' / 'fish' / 'fish_history'
+        legacy.parent.mkdir(parents=True)
+        legacy.write_text('')
+        assert Fish()._get_history_file_name() == str(legacy)
