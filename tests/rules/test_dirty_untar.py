@@ -23,7 +23,7 @@ def tar_error(tmpdir):
                     os.remove(file)
 
             with tarfile.TarFile(path, 'r') as archive:
-                archive.extractall()
+                archive.extractall(filter='data')
 
         os.chdir(str(tmpdir))
         reset(path)

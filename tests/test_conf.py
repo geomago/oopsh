@@ -121,5 +121,9 @@ def test_get_user_dir_path(mocker, os_environ, settings, legacy_dir_exists,
     else:
         os_environ.pop('XDG_CONFIG_HOME', None)
 
-    path = settings._get_user_dir_path().as_posix()
+    if legacy_dir_exists:
+        with pytest.warns(UserWarning, match='is deprecated'):
+            path = settings._get_user_dir_path().as_posix()
+    else:
+        path = settings._get_user_dir_path().as_posix()
     assert path == os.path.expanduser(result)
