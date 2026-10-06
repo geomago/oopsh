@@ -84,7 +84,6 @@ Fixes for reports filed on thefuck and never addressed there:
 - Arch Linux rules don't fail when `pkgfile` or its database is missing
   (thefuck#1129).
 - New `git_safe_directory` rule for git's "dubious ownership" error (thefuck#1376).
-
 - Starts and installs on Python 3.12 and later: thefuck used `distutils`, which
   Python 3.12 removed, and `pkg_resources` in `setup.py`.
 - No more deprecation warnings on recent Python versions (e.g. `re.sub` with a
