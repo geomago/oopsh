@@ -70,6 +70,9 @@ Fixes for reports filed on thefuck and never addressed there:
   oopsh now refuses a log other users can write (thefuck#1622).
 - Third-party rule packages are only loaded from directories other users can't
   write (thefuck#1623).
+- Rules quote the text they copy from a command's output into the fix when the
+  shell would interpret it, so that output can't smuggle in shell code
+  (thefuck#1622).
 
 ### Fixed
 
@@ -84,6 +87,7 @@ Fixes for reports filed on thefuck and never addressed there:
 - Arch Linux rules don't fail when `pkgfile` or its database is missing
   (thefuck#1129).
 - New `git_safe_directory` rule for git's "dubious ownership" error (thefuck#1376).
+- `oopsh --alias`, run at every shell start, is faster.
 - Starts and installs on Python 3.12 and later: thefuck used `distutils`, which
   Python 3.12 removed, and `pkg_resources` in `setup.py`.
 - No more deprecation warnings on recent Python versions (e.g. `re.sub` with a

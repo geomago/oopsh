@@ -117,6 +117,13 @@ Once 1.0 is out, be findable where thefuck users look for a replacement. Every s
 
 ## Later
 
-- [ ] Startup time (lazy rule loading) and making instant mode stable
-- [ ] Better support for newer shells (e.g. nushell)
+- [ ] Startup time: `oopsh --alias` went from ~70 to ~60 ms; lazy rule loading for the fix itself;
+      make instant mode stable
+- [ ] Nushell support done properly (nvbn/thefuck#1254, #1441; the PR #1442 ran fixes in a subprocess)
+- [ ] Esc to cancel the selection without breaking the arrow keys (nvbn/thefuck#1506)
+- [ ] `--shell` option, or document `TF_SHELL` (nvbn/thefuck#1536, #1538)
+- [ ] Commands wrapped by others, like `hub` for `git` (nvbn/thefuck#1101)
+- [ ] An opt-in plugin for LLM suggestions (nvbn/thefuck#1363, #1365, #1458): never on by default,
+      commands are sent to an external service
+- [ ] Keep auditing rules that build fixes from output, now that most go through `replace_argument`
 - [ ] Rule docs generated automatically from the code
