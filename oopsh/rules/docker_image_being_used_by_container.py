@@ -1,4 +1,4 @@
-from oopsh.utils import for_app
+from oopsh.utils import for_app, quote_if_unsafe
 from oopsh.shells import shell
 
 
@@ -17,4 +17,4 @@ def get_new_command(command):
     the previous docker image rm {image ID} command
     '''
     container_id = command.output.strip().split(' ')
-    return shell.and_('docker container rm -f {}', '{}').format(container_id[-1], command.script)
+    return shell.and_('docker container rm -f {}', '{}').format(quote_if_unsafe(container_id[-1]), command.script)

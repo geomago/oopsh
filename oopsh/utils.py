@@ -4,6 +4,7 @@ import os
 import pickle
 import re
 import shelve
+import shlex
 import shutil
 import sys
 from decorator import decorator
@@ -130,9 +131,35 @@ def replace_command_name(script, new_name):
     return u' '.join(part for part in (new_name, rest) if part)
 
 
-def replace_argument(script, from_, to):
-    """Replaces command line argument."""
-    replaced_in_the_end = re.sub(u' {}$'.format(re.escape(from_)), u' {}'.format(to),
+# Characters that make the shell do something other than pass a word along
+UNSAFE_CHARACTERS = re.compile(r'[;&|$`<>()\\\n\'"*?!{}]')
+
+
+def quote_if_unsafe(word):
+    """Quotes `word` if the shell would interpret it.
+
+    Rules build fixes from text in commands' output, which whoever controls
+    that output (a remote server, a package index...) could fill with shell
+    code; the alias evaluates the fix (nvbn/thefuck#1622). Ordinary
+    suggestions, even with spaces like `fetch --all`, are left as they are.
+
+    """
+    if UNSAFE_CHARACTERS.search(word):
+        return shlex.quote(word)
+    return word
+
+
+def replace_argument(script, from_, to, quote=True):
+    """Replaces command line argument.
+
+    `to` is quoted if the shell would interpret it, unless `quote` is
+    `False`: for replacements a rule builds itself, already safe.
+
+    """
+    if quote:
+        to = quote_if_unsafe(to)
+    replaced_in_the_end = re.sub(u' {}$'.format(re.escape(from_)),
+                                 lambda _: u' {}'.format(to),
                                  script, count=1)
     if replaced_in_the_end != script:
         return replaced_in_the_end

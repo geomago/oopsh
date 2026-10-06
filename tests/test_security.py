@@ -67,3 +67,20 @@ def test_read_log_ignores_logs_others_can_write(tmp_path, mode, trusted):
         assert _is_trusted_log(fd) is trusted
     finally:
         os.close(fd)
+
+
+@pytest.mark.parametrize('rule, script, output, expected', [
+    ('python_module_error', 'python app.py',
+     "ModuleNotFoundError: No module named 'x;touch /tmp/pwned'",
+     "pip install 'x;touch /tmp/pwned' && python app.py"),
+    ('heroku_multiple_apps', 'heroku pg',
+     'Multiple apps in git remotes\n Usage: --remote heroku-dev\n Your apps:\n'
+     '  $(id) (heroku-dev)\n',
+     "heroku pg --app '$(id)'")])
+def test_output_text_is_quoted(rule, script, output, expected):
+    """nvbn/thefuck#1622: rules quote what they copy from the output."""
+    module = importlib.import_module('oopsh.rules.' + rule)
+    new_command = module.get_new_command(Command(script, output))
+    if isinstance(new_command, list):
+        new_command = new_command[0]
+    assert new_command == expected

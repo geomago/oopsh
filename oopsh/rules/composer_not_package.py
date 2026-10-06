@@ -1,5 +1,5 @@
 import re
-from oopsh.utils import for_app
+from oopsh.utils import for_app, quote_if_unsafe
 
 
 @for_app("composer")
@@ -37,7 +37,7 @@ def get_new_command(command):
             .strip()
         )
         return command.script.replace(
-            offending_script_param, new_pkg + version_constraint
+            offending_script_param, quote_if_unsafe(new_pkg) + version_constraint
         )
     # else there are multiple suggestions
     # trim output text to make it more digestable by regex
@@ -48,6 +48,6 @@ def get_new_command(command):
     end_index = stripped_lines.index("")
     suggested_packages = stripped_lines[1:end_index]
     return [
-        command.script.replace(offending_script_param, pkg + version_constraint)
+        command.script.replace(offending_script_param, quote_if_unsafe(pkg) + version_constraint)
         for pkg in suggested_packages
     ]

@@ -1,5 +1,5 @@
 import re
-from oopsh.utils import for_app
+from oopsh.utils import for_app, quote_if_unsafe
 
 
 @for_app('heroku')
@@ -9,4 +9,4 @@ def match(command):
 
 def get_new_command(command):
     apps = re.findall('([^ ]*) \\([^)]*\\)', command.output)
-    return [command.script + ' --app ' + app for app in apps]
+    return [command.script + ' --app ' + quote_if_unsafe(app) for app in apps]

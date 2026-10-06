@@ -1,4 +1,4 @@
-from oopsh.utils import eager, get_closest, for_app
+from oopsh.utils import eager, for_app, get_closest, quote_if_unsafe
 
 
 @for_app('fab')
@@ -33,6 +33,6 @@ def get_new_command(command):
     for not_found in not_found_commands:
         fix = get_closest(not_found, possible_commands)
         script = script.replace(' {}'.format(not_found),
-                                ' {}'.format(fix))
+                                ' {}'.format(quote_if_unsafe(fix)))
 
     return script

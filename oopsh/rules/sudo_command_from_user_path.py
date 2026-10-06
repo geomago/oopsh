@@ -1,5 +1,5 @@
 import re
-from oopsh.utils import for_app, which, replace_argument
+from oopsh.utils import for_app, quote_if_unsafe, replace_argument, which
 
 
 def _get_command_name(command):
@@ -17,5 +17,7 @@ def match(command):
 
 def get_new_command(command):
     command_name = _get_command_name(command)
-    return replace_argument(command.script, command_name,
-                            u'env "PATH=$PATH" {}'.format(command_name))
+    return replace_argument(
+        command.script, command_name,
+        u'env "PATH=$PATH" {}'.format(quote_if_unsafe(command_name)),
+        quote=False)

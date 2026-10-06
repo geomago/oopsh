@@ -144,6 +144,22 @@ def test_replace_argument(args, result):
     assert replace_argument(*args) == result
 
 
+@pytest.mark.parametrize('to, result', [
+    ('branch', 'git branch'),
+    ('fetch --all', 'git fetch --all'),
+    ('evil; touch /tmp/pwned', "git 'evil; touch /tmp/pwned'"),
+    ('$(id)', "git '$(id)'"),
+    ('a\\1', "git 'a\\1'")])
+def test_replace_argument_quotes_unsafe_words(to, result):
+    """nvbn/thefuck#1622: text taken from output can't run as shell code."""
+    assert replace_argument('git brnch', 'brnch', to) == result
+
+
+def test_replace_argument_without_quoting():
+    assert (replace_argument('sudo npm i', 'npm', 'env "PATH=$PATH" npm', quote=False)
+            == 'sudo env "PATH=$PATH" npm i')
+
+
 @pytest.mark.parametrize('stderr, result', [
     (("git: 'cone' is not a git command. See 'git --help'.\n"
       '\n'

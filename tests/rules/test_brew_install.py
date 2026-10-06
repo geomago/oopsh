@@ -63,3 +63,11 @@ def test_get_new_command(brew_no_available_formula_one, brew_no_available_formul
     assert get_new_command(Command('brew install aa',
                                    brew_no_available_formula_one))\
         != 'brew install aha'
+
+
+def test_get_new_command_quotes_suggestions():
+    """nvbn/thefuck#1622"""
+    output = ('Warning: No available formula with the name "foo". '
+              'Did you mean evil; touch /tmp/pwned?')
+    assert (get_new_command(Command('brew install foo', output))
+            == ["brew install 'evil; touch /tmp/pwned'"])

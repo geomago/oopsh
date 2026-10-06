@@ -1,5 +1,5 @@
 import re
-from oopsh.utils import for_app
+from oopsh.utils import for_app, quote_if_unsafe
 from oopsh.specific.brew import brew_available
 
 enabled_by_default = brew_available
@@ -21,4 +21,4 @@ def match(command):
 def get_new_command(command):
     matcher = re.search('Warning: No available formula with the name "(?:[^"]+)". Did you mean (.+)\\?', command.output)
     suggestions = _get_suggestions(matcher.group(1))
-    return ["brew install " + formula for formula in suggestions]
+    return ["brew install " + quote_if_unsafe(formula) for formula in suggestions]
