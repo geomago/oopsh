@@ -76,6 +76,23 @@ def test_get_all_executables():
     assert 'oops' not in all_callables
 
 
+@pytest.mark.usefixtures('no_memoize')
+@pytest.mark.parametrize('platform, expected', [
+    ('win32', {'git.exe', 'git', 'make.cmd', 'make', 'notes.txt', 'vim'}),
+    ('linux', {'git.exe', 'make.cmd', 'notes.txt', 'vim', 'oops.exe'})])
+def test_get_all_executables_windows_extensions(mocker, os_environ, platform, expected):
+    os_environ['PATH'] = 'bin'
+    mocker.patch('sys.platform', platform)
+    mocker.patch('oopsh.shells.shell.get_aliases', return_value=[])
+    exes = []
+    for name in ['git.exe', 'make.cmd', 'notes.txt', 'vim', 'oops.exe', 'oopsh']:
+        exe = mocker.Mock(is_dir=lambda: False)
+        exe.name = name
+        exes.append(exe)
+    mocker.patch('oopsh.utils.Path', return_value=mocker.Mock(iterdir=lambda: exes))
+    assert set(get_all_executables()) == expected
+
+
 @pytest.fixture
 def os_environ_pathsep(monkeypatch, path, pathsep):
     env = {'PATH': path}
