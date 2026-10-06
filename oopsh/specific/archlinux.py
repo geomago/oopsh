@@ -24,11 +24,10 @@ def get_pkgfile(command):
         ).splitlines()
 
         return [package.split()[0] for package in packages]
-    except subprocess.CalledProcessError as err:
-        if err.returncode == 1 and err.output == "":
-            return []
-        else:
-            raise err
+    except (OSError, subprocess.CalledProcessError):
+        # pkgfile isn't installed, its database was never built
+        # (`pkgfile --update`), or nothing provides the command
+        return []
 
 
 def archlinux_env():
