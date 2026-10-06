@@ -34,7 +34,7 @@ The command layout:
 | Piece                 | thefuck                          | oopsh                              |
 |-----------------------|----------------------------------|------------------------------------|
 | PyPI package          | `thefuck`                        | `oopsh`                            |
-| Python package        | `thefuck`                        | `oopsh` (+ `thefuck` compat shim, M3) |
+| Python package        | `thefuck`                        | `oopsh` (`thefuck.*` imports still work) |
 | Executable            | `thefuck`                        | `oopsh`                            |
 | Shell function        | `fuck`                           | `oops`, plus `oopsh`               |
 | Shell setup           | `eval "$(thefuck --alias)"`      | `eval "$(oopsh --alias)"`          |
@@ -46,23 +46,26 @@ The command layout:
       `oopsh` passes executable arguments (`--alias`, `--version`, `--help`, …) to the binary,
       everything else to `oops`. tcsh and generic POSIX shells get `oops` only
 - [x] Update the first-run setup (`not_configured`) for the new names
-- [ ] Windows: the published wheels never installed `scripts/fuck.bat` / `fuck.ps1` (they were only
-      added by `setup.py` when built on Windows). Decide whether to ship `oops.bat` / `oops.ps1`
-      for cmd users or drop them
+- [x] Windows: drop `scripts/fuck.bat` / `fuck.ps1`. The published wheels never installed them
+      (`setup.py` only added them when built on Windows); PowerShell uses `iex "$(oopsh --alias)"`
 - [x] Rename the user-facing env vars `THEFUCK_*` → `OOPSH_*`
 - [x] Rewrite the README: new name, "Based on thefuck by Vladimir Iakovlev", no original logo or gifs
 - [x] Add our copyright line to `LICENSE.md`, keeping the original one
 
 ## Milestone 3: Painless migration from thefuck
 
-- [ ] If `~/.config/oopsh/` doesn't exist, read `settings.py` and `rules/` from `~/.config/thefuck/`
-- [ ] Keep a `thefuck` compatibility package so custom rules that do
-      `from thefuck.utils import ...` / `from thefuck.specific.git import ...` keep working
-- [ ] Still honour `THEFUCK_*` env vars when the `OOPSH_*` equivalent isn't set
-- [ ] `oopsh --migrate`: copy the config to `~/.config/oopsh/` and suggest how to update the shell rc file
-- [ ] Optional `fuck` alias for people who want to keep it (off by default)
-- [ ] Migration guide in the docs
-- [ ] Tests covering all of the above
+- [x] If `~/.config/oopsh/` doesn't exist, read `settings.py` and `rules/` from `~/.config/thefuck/`
+      (or the legacy `~/.thefuck/`)
+- [x] Custom rules that do `from thefuck.utils import ...` / `from thefuck.specific.git import ...`
+      keep working: inside oopsh, `thefuck.*` imports resolve to the `oopsh.*` modules. No `thefuck`
+      package is installed, so oopsh can sit next to a real thefuck
+- [x] Third-party rule packages: look for `oopsh_contrib_*` as well as `thefuck_contrib_*`
+- [x] Still honour `THEFUCK_*` env vars when the `OOPSH_*` equivalent isn't set
+- [x] `oopsh --migrate`: copy the config to `~/.config/oopsh/` (never overwriting) and suggest how
+      to update the shell rc file and env vars
+- [x] Optional `fuck` alias for people who want to keep it: `eval "$(oopsh --alias fuck)"`
+- [x] Migration guide in the docs (README, "Coming from thefuck")
+- [x] Tests covering all of the above
 
 ## Milestone 4: First release (oopsh 1.0)
 
@@ -70,7 +73,10 @@ The command layout:
 - [ ] `CHANGELOG.md` listing the changes since thefuck 3.32
 - [ ] Publish to PyPI with Trusted Publishing from GitHub Actions
 - [ ] Recommended install methods: `pipx install oopsh` / `uv tool install oopsh`
-- [ ] Open a PR upstream (nvbn/thefuck) with the Python 3.12 fix
+- [ ] Open a PR upstream (nvbn/thefuck) with the Python 3.12 fix, mentioning oopsh in the
+      description, and write to the maintainer
+- [ ] PyPI and GitHub metadata people actually search for: description and topics with
+      "thefuck alternative", "maintained fork", "Python 3.12"
 
 ## Milestone 5: Upstream backlog
 
@@ -83,8 +89,21 @@ The command layout:
 
 - [ ] Homebrew: own tap (`geomago/tap`) first, homebrew-core later
 - [ ] AUR, nixpkgs, Debian/Ubuntu
+- [ ] Where the thefuck package is broken on Python 3.12+ (Homebrew, AUR, nixpkgs, Debian/Ubuntu),
+      report it with a link to the fix; once oopsh has some traction, propose it as a new package
 - [ ] Windows: Scoop / winget
-- [ ] Decide what to do with the `snapcraft.yaml` and `install.sh` inherited from upstream
+- [ ] Decide what to do with the `snapcraft.yaml` and `install.sh` inherited from upstream (still say thefuck)
+
+## Milestone 7: Launch
+
+Once 1.0 is out, be findable where thefuck users look for a replacement. Every step once, no spam.
+
+- [ ] One helpful comment in each of the main upstream issues (Python 3.12, `distutils`,
+      Ubuntu 24.04, #1566 "is it still maintained?") with the fix and how to install oopsh
+- [ ] Curated lists: awesome-shell, awesome-cli-apps; list oopsh on AlternativeTo as a
+      thefuck alternative
+- [ ] Announce: Show HN, r/commandline, r/Python
+- [ ] Keep the README's first screen about the one-line switch from thefuck
 
 ## Later
 

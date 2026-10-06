@@ -9,6 +9,10 @@ It is not an official thefuck release. All of thefuck's rules work in oopsh, and
 the project keeps thefuck's full history and MIT license. See the
 [roadmap](ROADMAP.md) for what's planned.
 
+**Switching from thefuck?** Install oopsh and change one line in your shell config:
+your settings, custom rules and `THEFUCK_*` variables keep working.
+[More details](#coming-from-thefuck).
+
 Is oopsh too slow? [Try the experimental instant mode!](#experimental-instant-mode)
 
 Examples:
@@ -168,15 +172,21 @@ oops -r
 
 ## Coming from thefuck
 
-oopsh is a drop-in replacement. Until automatic migration is in place
-(see the [roadmap](ROADMAP.md#milestone-3-painless-migration-from-thefuck)):
+oopsh is a drop-in replacement for thefuck:
+
+- Until you have an oopsh config dir, oopsh uses your thefuck one
+  (`~/.config/thefuck/` or `~/.thefuck/`) as it is, settings and custom rules included.
+- Custom rules and `thefuck_contrib_*` packages that import from thefuck
+  (`from thefuck.utils import for_app`) keep working unchanged.
+- `THEFUCK_*` environment variables keep working; the `OOPSH_*` ones win if both are set.
+
+To switch:
 
 1. In your shell config, replace `eval $(thefuck --alias)` with `eval "$(oopsh --alias)"`.
    You now type `oops` instead of `fuck`; to keep the old word, use `eval "$(oopsh --alias fuck)"`.
-2. Move your settings and custom rules from `~/.config/thefuck/` to `~/.config/oopsh/`,
-   and in custom rules change imports like `from thefuck.utils import ...` to `from oopsh.utils import ...`.
-3. Rename any `OOPSH_*` environment variables to `OOPSH_*`.
-4. Uninstall thefuck: `pip uninstall thefuck`.
+2. Optionally, run `oopsh --migrate`: it copies your thefuck config to `~/.config/oopsh/`
+   (it never overwrites files) and tells you what else you may want to change.
+3. Uninstall thefuck: `pip uninstall thefuck`.
 
 ##### [Back to Contents](#contents)
 
@@ -506,18 +516,18 @@ export OOPSH_NUM_CLOSE_MATCHES='5'
 ## Third-party packages with rules
 
 If you'd like to make a specific set of non-public rules, but would still like
-to share them with others, create a package named `thefuck_contrib_*` with
-the following structure:
+to share them with others, create a package named `oopsh_contrib_*` with
+the following structure (packages named `thefuck_contrib_*` work too):
 
 ```
-thefuck_contrib_foo
-  thefuck_contrib_foo
+oopsh_contrib_foo
+  oopsh_contrib_foo
     rules
       __init__.py
       *third-party rules*
     __init__.py
     *third-party-utils*
-  setup.py
+  pyproject.toml
 ```
 
 oopsh will find rules located in the `rules` module.
