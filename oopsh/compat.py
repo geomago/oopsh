@@ -1,12 +1,14 @@
 """Compatibility with thefuck, so that existing setups keep working."""
 import importlib
-import importlib.abc
 import importlib.util
 import sys
 
 
-class ThefuckImportAlias(importlib.abc.MetaPathFinder, importlib.abc.Loader):
+class ThefuckImportAlias(object):
     """Makes `import thefuck.x` return the `oopsh.x` module.
+
+    Both a meta path finder and a loader; it doesn't subclass the
+    `importlib.abc` classes, slow to import, as oopsh starts with every shell.
 
     Custom rules and `thefuck_contrib_*` packages written for thefuck import
     helpers like `from thefuck.utils import for_app`. They get the very same
