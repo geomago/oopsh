@@ -1,4 +1,4 @@
-# oopsh [![Version][version-badge]][version-link] [![Build Status][workflow-badge]][workflow-link] [![MIT License][license-badge]](LICENSE.md)
+# oopsh [![Version][version-badge]][version-link] [![Build Status][workflow-badge]][workflow-link] [![MIT License][license-badge]](https://github.com/geomago/oopsh/blob/main/LICENSE.md)
 
 **oopsh** corrects errors in previous console commands: type `oops` after a
 failed command and it suggests (and runs) the fixed one.
@@ -7,7 +7,7 @@ oopsh is a maintained fork of [thefuck](https://github.com/nvbn/thefuck) by
 Vladimir Iakovlev, which is no longer maintained and doesn't run on Python 3.12+.
 It is not an official thefuck release. All of thefuck's rules work in oopsh, and
 the project keeps thefuck's full history and MIT license. See the
-[roadmap](ROADMAP.md) for what's planned.
+[roadmap](https://github.com/geomago/oopsh/blob/main/ROADMAP.md) for what's planned.
 
 **Switching from thefuck?** Install oopsh and change one line in your shell config:
 your settings, custom rules and `THEFUCK_*` variables keep working.
@@ -555,11 +555,11 @@ eval "$(oopsh --alias --enable-experimental-instant-mode)"
 
 ## Developing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md)
+See [CONTRIBUTING.md](https://github.com/geomago/oopsh/blob/main/CONTRIBUTING.md)
 
 ## License MIT
 
-Project License can be found [here](LICENSE.md).
+Project License can be found [here](https://github.com/geomago/oopsh/blob/main/LICENSE.md).
 
 oopsh is based on [thefuck](https://github.com/nvbn/thefuck) by Vladimir Iakovlev
 and its many contributors, originally inspired by a

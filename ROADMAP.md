@@ -69,13 +69,15 @@ The command layout:
 
 ## Milestone 4: First release (oopsh 1.0)
 
-- [ ] Choose the version scheme (proposal: 1.0.0, independent of thefuck 3.x)
-- [ ] `CHANGELOG.md` listing the changes since thefuck 3.32
-- [ ] Publish to PyPI with Trusted Publishing from GitHub Actions
-- [ ] Recommended install methods: `pipx install oopsh` / `uv tool install oopsh`
-- [ ] Open a PR upstream (nvbn/thefuck) with the Python 3.12 fix, mentioning oopsh in the
-      description, and write to the maintainer
-- [ ] PyPI and GitHub metadata people actually search for: description and topics with
+- [x] Choose the version scheme: semantic versioning from 1.0.0, independent of thefuck 3.x
+- [x] `CHANGELOG.md` listing the changes since thefuck 3.32
+- [x] Release workflow: pushing a `vX.Y.Z` tag builds, publishes to PyPI with Trusted Publishing
+      and creates the GitHub release
+- [ ] Configure the trusted publisher on PyPI, tag `v1.0.0`
+- [ ] Recommended install methods in the README: `pipx install oopsh` / `uv tool install oopsh`
+- [ ] Write to the thefuck maintainer, offering to help maintain thefuck itself. No new upstream PR:
+      at least 8 open PRs already carry the same `distutils` fix (#1247, #1404, #1534, #1619, …)
+- [x] PyPI and GitHub metadata people actually search for: description and topics with
       "thefuck alternative", "maintained fork", "Python 3.12"
 
 ## Milestone 5: Upstream backlog
