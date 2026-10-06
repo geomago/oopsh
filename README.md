@@ -371,6 +371,7 @@ The following rules are enabled by default on specific platforms only:
 * `apt_get_search` &ndash; changes trying to search using `apt-get` with searching using `apt-cache`;
 * `apt_invalid_operation` &ndash; fixes invalid `apt` and `apt-get` calls, like `apt-get isntall vim`;
 * `apt_list_upgradable` &ndash; helps you run `apt list --upgradable` after `apt update`;
+* `apt_unable_to_locate` &ndash; suggests packages with a similar name when `apt` or `apt-get` cannot find a package;
 * `apt_upgrade` &ndash; helps you run `apt upgrade` after `apt list --upgradable`;
 * `brew_cask_dependency` &ndash; installs cask dependencies;
 * `brew_install` &ndash; fixes formula name for `brew install`;
