@@ -321,6 +321,7 @@ following rules are enabled by default:
 * `no_such_file` &ndash; creates missing directories with `mv` and `cp` commands;
 * `omnienv_no_such_command` &ndash; fixes wrong commands for `goenv`, `nodenv`, `pyenv` and `rbenv` (eg.: `pyenv isntall` or `goenv list`);
 * `open` &ndash; either prepends `http://` to address passed to `open` or creates a new file or directory and passes it to `open`;
+* `ping` &ndash; removes `http(s)://` and paths when you ping a URL copied from the browser;
 * `pip_install` &ndash; fixes permission issues with `pip install` commands by adding `--user` or prepending `sudo` if necessary;
 * `pip_unknown_command` &ndash; fixes wrong `pip` commands, for example `pip instatl/pip install`;
 * `php_s` &ndash; replaces `-s` by `-S` when trying to run a local php server;
