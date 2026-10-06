@@ -1,6 +1,5 @@
 import pytest
 from io import StringIO
-import os
 from unittest.mock import Mock
 from oopsh import const
 
@@ -73,6 +72,21 @@ class TestSettingsFromEnv(object):
         settings.init()
         assert settings.rules == const.DEFAULT_RULES + ['bash', 'lisp']
 
+    def test_from_thefuck_env(self, os_environ, settings):
+        os_environ.update({'THEFUCK_RULES': 'bash:lisp',
+                           'THEFUCK_WAIT_COMMAND': '55',
+                           'THEFUCK_REQUIRE_CONFIRMATION': 'false'})
+        settings.init()
+        assert settings.rules == ['bash', 'lisp']
+        assert settings.wait_command == 55
+        assert settings.require_confirmation is False
+
+    def test_oopsh_env_wins_over_thefuck_env(self, os_environ, settings):
+        os_environ.update({'THEFUCK_WAIT_COMMAND': '55',
+                           'OOPSH_WAIT_COMMAND': '10'})
+        settings.init()
+        assert settings.wait_command == 10
+
 
 def test_settings_from_args(settings):
     settings.init(Mock(yes=True, debug=True, repeat=True))
@@ -106,24 +120,26 @@ class TestInitializeSettingsFile(object):
         settings_file.close()
 
 
-@pytest.mark.parametrize('legacy_dir_exists, xdg_config_home, result', [
-    (False, '~/.config', '~/.config/oopsh'),
-    (False, '/user/test/config/', '/user/test/config/oopsh'),
-    (True, '~/.config', '~/.thefuck'),
-    (True, '/user/test/config/', '~/.thefuck')])
-def test_get_user_dir_path(mocker, os_environ, settings, legacy_dir_exists,
-                           xdg_config_home, result):
-    mocker.patch('oopsh.conf.Path.is_dir',
-                 return_value=legacy_dir_exists)
-
+@pytest.mark.parametrize('existing, xdg_config_home, result, warns', [
+    ([], None, 'home/.config/oopsh', False),
+    ([], 'xdg', 'xdg/oopsh', False),
+    (['xdg/thefuck'], 'xdg', 'xdg/thefuck', False),
+    (['home/.config/thefuck'], None, 'home/.config/thefuck', False),
+    (['home/.thefuck'], 'xdg', 'home/.thefuck', True),
+    (['xdg/oopsh', 'xdg/thefuck'], 'xdg', 'xdg/oopsh', False),
+    (['xdg/oopsh', 'home/.thefuck'], 'xdg', 'xdg/oopsh', False),
+    (['xdg/thefuck', 'home/.thefuck'], 'xdg', 'xdg/thefuck', False)])
+def test_get_user_dir_path(tmp_path, os_environ, settings, existing,
+                           xdg_config_home, result, warns):
+    os_environ['HOME'] = str(tmp_path / 'home')
     if xdg_config_home is not None:
-        os_environ['XDG_CONFIG_HOME'] = xdg_config_home
-    else:
-        os_environ.pop('XDG_CONFIG_HOME', None)
+        os_environ['XDG_CONFIG_HOME'] = str(tmp_path / xdg_config_home)
+    for path in existing:
+        (tmp_path / path).mkdir(parents=True)
 
-    if legacy_dir_exists:
+    if warns:
         with pytest.warns(UserWarning, match='is deprecated'):
-            path = settings._get_user_dir_path().as_posix()
+            path = settings._get_user_dir_path()
     else:
-        path = settings._get_user_dir_path().as_posix()
-    assert path == os.path.expanduser(result)
+        path = settings._get_user_dir_path()
+    assert path == tmp_path / result

@@ -83,7 +83,7 @@ EXECUTABLE = 'oopsh'
 # Arguments meant for the executable itself rather than for fixing a
 # command: the `oopsh` shell function passes them straight to it.
 EXECUTABLE_ARGUMENTS = ['-a', '--alias', '-v', '--version', '-h', '--help',
-                        '-l', '--shell-logger',
+                        '-l', '--shell-logger', '--migrate',
                         '--enable-experimental-instant-mode']
 
 CONFIGURATION_TIMEOUT = 60

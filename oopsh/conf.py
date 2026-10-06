@@ -3,14 +3,37 @@ import os
 import sys
 from warnings import warn
 from . import const
+from .compat import install_thefuck_import_alias
 from .system import Path
 
 
 def load_source(name, pathname, _file=None):
+    install_thefuck_import_alias()
     module_spec = importlib.util.spec_from_file_location(name, pathname)
     module = importlib.util.module_from_spec(module_spec)
     module_spec.loader.exec_module(module)
     return module
+
+
+def get_user_dir():
+    """Returns oopsh's config dir, `$XDG_CONFIG_HOME/oopsh`."""
+    xdg_config_home = os.environ.get('XDG_CONFIG_HOME', '~/.config')
+    return Path(xdg_config_home, 'oopsh').expanduser()
+
+
+def get_thefuck_user_dir():
+    """Returns thefuck's config dir if it exists, otherwise `None`."""
+    xdg_config_home = os.environ.get('XDG_CONFIG_HOME', '~/.config')
+    for path in (Path(xdg_config_home, 'thefuck'), Path('~', '.thefuck')):
+        path = path.expanduser()
+        if path.is_dir():
+            return path
+    return None
+
+
+def get_thefuck_env_name(env):
+    """Returns thefuck's name for an oopsh env var, like `THEFUCK_DEBUG`."""
+    return 'THEFUCK_' + env[len('OOPSH_'):]
 
 
 class Settings(dict):
@@ -48,18 +71,24 @@ class Settings(dict):
                     settings_file.write(u'# {} = {}\n'.format(*setting))
 
     def _get_user_dir_path(self):
-        """Returns Path object representing the user config resource"""
-        xdg_config_home = os.environ.get('XDG_CONFIG_HOME', '~/.config')
-        user_dir = Path(xdg_config_home, 'oopsh').expanduser()
-        legacy_user_dir = Path('~', '.thefuck').expanduser()
+        """Returns Path object representing the user config resource.
 
-        # For backward compatibility use legacy '~/.thefuck' if it exists:
-        if legacy_user_dir.is_dir():
-            warn(u'Config path {} is deprecated. Please move to {}'.format(
-                legacy_user_dir, user_dir))
-            return legacy_user_dir
-        else:
+        Until oopsh has its own config dir, thefuck's one is used, so
+        migrating from thefuck doesn't require any change.
+
+        """
+        user_dir = get_user_dir()
+        if user_dir.is_dir():
             return user_dir
+
+        thefuck_dir = get_thefuck_user_dir()
+        if thefuck_dir is None:
+            return user_dir
+
+        if thefuck_dir.name == '.thefuck':
+            warn(u'Config path {} is deprecated. Please move to {}'.format(
+                thefuck_dir, user_dir))
+        return thefuck_dir
 
     def _setup_user_dir(self):
         """Returns user config dir, create it when it doesn't exist."""
@@ -113,10 +142,15 @@ class Settings(dict):
             return val
 
     def _settings_from_env(self):
-        """Loads settings from env."""
-        return {attr: self._val_from_env(env, attr)
-                for env, attr in const.ENV_TO_ATTR.items()
-                if env in os.environ}
+        """Loads settings from env, falling back to thefuck's env vars."""
+        from_env = {}
+        for env, attr in const.ENV_TO_ATTR.items():
+            legacy_env = get_thefuck_env_name(env)
+            if env in os.environ:
+                from_env[attr] = self._val_from_env(env, attr)
+            elif legacy_env in os.environ:
+                from_env[attr] = self._val_from_env(legacy_env, attr)
+        return from_env
 
     def _settings_from_args(self, args):
         """Loads settings from args."""

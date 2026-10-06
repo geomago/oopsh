@@ -31,10 +31,11 @@ def get_rules_import_paths():
     yield settings.user_dir.joinpath('rules')
     # Packages with third-party rules:
     for path in sys.path:
-        for contrib_module in Path(path).glob('thefuck_contrib_*'):
-            contrib_rules = contrib_module.joinpath('rules')
-            if contrib_rules.is_dir():
-                yield contrib_rules
+        for pattern in ('oopsh_contrib_*', 'thefuck_contrib_*'):
+            for contrib_module in Path(path).glob(pattern):
+                contrib_rules = contrib_module.joinpath('rules')
+                if contrib_rules.is_dir():
+                    yield contrib_rules
 
 
 def get_rules():

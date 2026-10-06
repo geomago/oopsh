@@ -8,12 +8,13 @@ def _args(**override):
             'help': False, 'version': False, 'debug': False,
             'force_command': None, 'repeat': False,
             'enable_experimental_instant_mode': False,
-            'shell_logger': None}
+            'shell_logger': None, 'migrate': False}
     args.update(override)
     return args
 
 
 @pytest.mark.parametrize('argv, result', [
+    (['oopsh', '--migrate'], _args(migrate=True)),
     (['oopsh'], _args()),
     (['oopsh', '-a'], _args(alias='oops')),
     (['oopsh', '--alias', '--enable-experimental-instant-mode'],

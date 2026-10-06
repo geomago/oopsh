@@ -30,6 +30,11 @@ class Parser(object):
             action='store',
             help='log shell output to the file')
         self._parser.add_argument(
+            '--migrate',
+            action='store_true',
+            help='copy your thefuck config to oopsh and explain what '
+                 'else to change')
+        self._parser.add_argument(
             '--enable-experimental-instant-mode',
             action='store_true',
             help='enable experimental instant mode, use on your own risk')
