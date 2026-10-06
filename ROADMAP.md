@@ -80,8 +80,8 @@ The command layout:
 
 The first release waits until this milestone is done.
 
-- [ ] Triage the ~148 open upstream PRs: merge the useful ones by cherry-picking them
-      with their original authors (many are new rules)
+- [x] Triage the 151 open upstream PRs: 40 merged with their original authors, the rest
+      documented in [docs/upstream-prs.md](docs/upstream-prs.md)
 - [ ] Triage the ~309 open upstream issues: label them, reproduce the real bugs on oopsh
 - [ ] `CONTRIBUTING.md`, issue/PR templates, labels, code of conduct
 

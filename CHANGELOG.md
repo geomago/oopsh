@@ -28,6 +28,38 @@ up to January 2024.
   overwriting anything, and explains what else to change.
 - Third-party rule packages can be named `oopsh_contrib_*`.
 
+### From thefuck's open pull requests
+
+oopsh reviewed all 151 pull requests left open on thefuck and merged 40 of
+them, keeping their authors (see [docs/upstream-prs.md](docs/upstream-prs.md)).
+
+New rules: `apt_unable_to_locate`, `cd_quotes`, `composer_not_package`,
+`docker_daemon_not_running`, `edit_filename`, `gcloud_cli`,
+`kedro_no_such_command`, `makefile`, `ninja`, `nix_shell`, `ping`,
+`rbenv_install`, `restic_typo`, `su`, `terraform_init_upgrade`,
+`upper_to_lower_case`, `xcode_license`.
+
+Improved rules:
+
+- `git_not_command`: common typos git doesn't catch, like `git lock` -> `git log`.
+- `git_branch_delete`: also `--delete`; `git_branch_delete_checked_out` switches
+  to the repository's default branch instead of always `master`.
+- `chmod_x`: absolute and other non-relative paths.
+- `composer_not_command`: only unknown commands, every suggestion.
+- `npm_missing_script`: messages of npm 7 and later.
+- `pacman` / `pacman_not_found`: `paru` support.
+- `brew_unknown_command`: up-to-date list of Homebrew commands.
+- `cd_mkdir`: PowerShell and cmd.exe errors.
+
+Other fixes:
+
+- fish: find the history where fish 2.3+ keeps it (`~/.local/share/fish`).
+- bash/zsh: work with `set -u` (nounset); no crash on an empty bash alias.
+- No traceback when the output pipe is closed, or when a process can't be killed.
+- When stdin isn't a terminal, show the fix and explain `--yes` instead of crashing.
+- Debug output no longer dumps the whole environment, which can hold secrets.
+- Windows: commands are also known without their extension (`git.exe` as `git`).
+
 ### Fixed
 
 - Starts and installs on Python 3.12 and later: thefuck used `distutils`, which
