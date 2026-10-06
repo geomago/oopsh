@@ -16,6 +16,11 @@ def patch_get_key(monkeypatch):
     return patch
 
 
+def test_read_actions_stops_at_end_of_input(patch_get_key):
+    patch_get_key(['x', ''])
+    assert list(ui.read_actions()) == [const.ACTION_ABORT]
+
+
 def test_read_actions(patch_get_key):
     patch_get_key([
         # Enter:

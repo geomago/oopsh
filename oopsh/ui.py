@@ -29,6 +29,11 @@ def read_actions():
             yield const.ACTION_NEXT
         elif key in (const.KEY_CTRL_C, 'q'):
             yield const.ACTION_ABORT
+        elif key == '':
+            # End of input: the terminal was closed. Without this we would
+            # spin forever at full CPU (nvbn/thefuck#806)
+            yield const.ACTION_ABORT
+            return
         elif key in ('\n', '\r'):
             yield const.ACTION_SELECT
 
