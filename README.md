@@ -480,7 +480,7 @@ Several oopsh parameters can be changed in the file `$XDG_CONFIG_HOME/oopsh/sett
 * `wait_slow_command` &ndash; max amount of time in seconds for getting previous command output if it in `slow_commands` list;
 * `slow_commands` &ndash; list of slow commands;
 * `num_close_matches` &ndash; the maximum number of close matches to suggest, by default `3`.
-* `excluded_search_path_prefixes` &ndash; path prefixes to ignore when searching for commands, by default `[]`.
+* `excluded_search_path_prefixes` &ndash; path prefixes to ignore when searching for commands, by default `[]`. On Windows Subsystem for Linux (WSL), adding `['/mnt/']` or `['/mnt/c/']` avoids searching Windows paths, which can make oopsh much slower.
 
 An example of `settings.py`:
 
