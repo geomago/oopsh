@@ -1,20 +1,16 @@
+import importlib.util
 import os
 import sys
 from warnings import warn
-from six import text_type
 from . import const
 from .system import Path
 
-try:
-    import importlib.util
 
-    def load_source(name, pathname, _file=None):
-        module_spec = importlib.util.spec_from_file_location(name, pathname)
-        module = importlib.util.module_from_spec(module_spec)
-        module_spec.loader.exec_module(module)
-        return module
-except ImportError:
-    from imp import load_source
+def load_source(name, pathname, _file=None):
+    module_spec = importlib.util.spec_from_file_location(name, pathname)
+    module = importlib.util.module_from_spec(module_spec)
+    module_spec.loader.exec_module(module)
+    return module
 
 
 class Settings(dict):
@@ -77,7 +73,7 @@ class Settings(dict):
     def _settings_from_file(self):
         """Loads settings from file."""
         settings = load_source(
-            'settings', text_type(self.user_dir.joinpath('settings.py')))
+            'settings', str(self.user_dir.joinpath('settings.py')))
         return {key: getattr(settings, key)
                 for key in const.DEFAULT_SETTINGS.keys()
                 if hasattr(settings, key)}

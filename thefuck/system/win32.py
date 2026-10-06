@@ -1,12 +1,11 @@
 import os
 import msvcrt
-import win_unicode_console
+from pathlib import Path
 from .. import const
 
 
 def init_output():
     import colorama
-    win_unicode_console.enable()
     colorama.init()
 
 
@@ -27,12 +26,6 @@ def get_key():
 
 def open_command(arg):
     return 'cmd /c start ' + arg
-
-
-try:
-    from pathlib import Path
-except ImportError:
-    from pathlib2 import Path
 
 
 def _expanduser(self):

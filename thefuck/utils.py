@@ -1,10 +1,10 @@
 import atexit
+import dbm
 import os
 import pickle
 import re
 import shelve
 import sys
-import six
 from decorator import decorator
 from difflib import get_close_matches as difflib_get_close_matches
 from functools import wraps
@@ -14,12 +14,7 @@ from .system import Path
 
 DEVNULL = open(os.devnull, 'w')
 
-if six.PY2:
-    import anydbm
-    shelve_open_error = anydbm.error
-else:
-    import dbm
-    shelve_open_error = dbm.error
+shelve_open_error = dbm.error
 
 
 def memoize(fn):
@@ -121,13 +116,13 @@ def get_all_executables():
     tf_alias = get_alias()
     tf_entry_points = ['thefuck', 'fuck']
 
-    bins = [exe.name.decode('utf8') if six.PY2 else exe.name
+    bins = [exe.name
             for path in os.environ.get('PATH', '').split(os.pathsep)
             if include_path_in_search(path)
             for exe in _safe(lambda: list(Path(path).iterdir()), [])
             if not _safe(exe.is_dir, True)
             and exe.name not in tf_entry_points]
-    aliases = [alias.decode('utf8') if six.PY2 else alias
+    aliases = [alias
                for alias in shell.get_aliases() if alias != tf_alias]
 
     return bins + aliases
@@ -227,13 +222,7 @@ class Cache(object):
         default_xdg_cache_dir = os.path.expanduser("~/.cache")
         cache_dir = os.getenv("XDG_CACHE_HOME", default_xdg_cache_dir)
 
-        # Ensure the cache_path exists, Python 2 does not have the exist_ok
-        # parameter
-        try:
-            os.makedirs(cache_dir)
-        except OSError:
-            if not os.path.isdir(cache_dir):
-                raise
+        os.makedirs(cache_dir, exist_ok=True)
 
         return cache_dir
 
@@ -295,14 +284,9 @@ cache.disabled = False
 
 
 def get_installation_version():
-    try:
-        from importlib.metadata import version
+    from importlib.metadata import version
 
-        return version('thefuck')
-    except ImportError:
-        import pkg_resources
-
-        return pkg_resources.require('thefuck')[0].version
+    return version('thefuck')
 
 
 def get_alias():
@@ -335,13 +319,10 @@ def get_valid_history_without_current(command):
 def format_raw_script(raw_script):
     """Creates single script from a list of script parts.
 
-    :type raw_script: [basestring]
-    :rtype: basestring
+    :type raw_script: [str]
+    :rtype: str
 
     """
-    if six.PY2:
-        script = ' '.join(arg.decode('utf-8') for arg in raw_script)
-    else:
-        script = ' '.join(raw_script)
+    script = ' '.join(raw_script)
 
     return script.lstrip()

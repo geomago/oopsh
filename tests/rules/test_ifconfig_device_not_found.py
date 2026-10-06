@@ -1,5 +1,5 @@
 import pytest
-from six import BytesIO
+from io import BytesIO
 from thefuck.rules.ifconfig_device_not_found import match, get_new_command
 from thefuck.types import Command
 

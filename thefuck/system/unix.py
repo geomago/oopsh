@@ -3,6 +3,7 @@ import sys
 import tty
 import termios
 import colorama
+from pathlib import Path
 from shutil import which
 from .. import const
 
@@ -41,12 +42,6 @@ def open_command(arg):
     if which('xdg-open'):
         return 'xdg-open ' + arg
     return 'open ' + arg
-
-
-try:
-    from pathlib import Path
-except ImportError:
-    from pathlib2 import Path
 
 
 def _expanduser(self):

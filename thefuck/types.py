@@ -15,8 +15,8 @@ class Command(object):
     def __init__(self, script, output):
         """Initializes command with given values.
 
-        :type script: basestring
-        :type output: basestring
+        :type script: str
+        :type output: str
 
         """
         self.script = script
@@ -68,7 +68,7 @@ class Command(object):
     def from_raw_script(cls, raw_script):
         """Creates instance of `Command` from a list of script parts.
 
-        :type raw_script: [basestring]
+        :type raw_script: [str]
         :rtype: Command
         :raises: EmptyCommand
 
@@ -90,11 +90,11 @@ class Rule(object):
                  priority, requires_output):
         """Initializes rule with given fields.
 
-        :type name: basestring
+        :type name: str
         :type match: (Command) -> bool
-        :type get_new_command: (Command) -> (basestring | [basestring])
+        :type get_new_command: (Command) -> (str | [str])
         :type enabled_by_default: boolean
-        :type side_effect: (Command, basestring) -> None
+        :type side_effect: (Command, str) -> None
         :type priority: int
         :type requires_output: bool
 
@@ -204,8 +204,8 @@ class CorrectedCommand(object):
     def __init__(self, script, side_effect, priority):
         """Initializes instance with given fields.
 
-        :type script: basestring
-        :type side_effect: (Command, basestring) -> None
+        :type script: str
+        :type side_effect: (Command, str) -> None
         :type priority: int
 
         """
