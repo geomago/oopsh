@@ -339,6 +339,7 @@ following rules are enabled by default:
 * `sed_unterminated_s` &ndash; adds missing '/' to `sed`'s `s` commands;
 * `sl_ls` &ndash; changes `sl` to `ls`;
 * `ssh_known_hosts` &ndash; removes host from `known_hosts` on warning;
+* `su` &ndash; runs the command with `su -c` when `sudo` is not installed;
 * `sudo` &ndash; prepends `sudo` to the previous command if it failed because of permissions;
 * `sudo_command_from_user_path` &ndash; runs commands from users `$PATH` with `sudo`;
 * `switch_lang` &ndash; switches command from your local layout to en;
