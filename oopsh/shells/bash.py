@@ -15,6 +15,7 @@ class Bash(Generic):
         # It is VERY important to have the variables declared WITHIN the function
         return '''
             function {name} () {{
+                local TF_STATUS;
                 TF_PYTHONIOENCODING=${{PYTHONIOENCODING:-}};
                 export TF_SHELL=bash;
                 export TF_ALIAS={name};
@@ -24,9 +25,11 @@ class Bash(Generic):
                 TF_CMD=$(
                     command {executable} {argument_placeholder} "$@"
                 ) && eval "$TF_CMD";
+                TF_STATUS=$?;
                 unset TF_HISTORY;
                 export PYTHONIOENCODING=$TF_PYTHONIOENCODING;
                 {alter_history}
+                return $TF_STATUS;
             }};
         '''.format(
             name=alias_name,

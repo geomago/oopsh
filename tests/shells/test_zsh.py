@@ -79,6 +79,18 @@ class TestZsh(object):
         one_line = ' '.join(shell.app_alias(alias_name).split())
         subprocess.check_call(['zsh', '-n', '-c', one_line])
 
+    @pytest.mark.parametrize('alter_history', [True, False])
+    def test_alias_returns_command_status(self, shell, settings, alter_history):
+        settings.alter_history = alter_history
+        lines = [line.strip() for line in shell.app_alias('oops').splitlines()
+                 if line.strip()]
+        body = lines[lines.index('oops () {') + 1:lines.index('};')]
+        # every statement is terminated, so `eval $(oopsh --alias)` on one
+        # line still reaches the `return`
+        assert all(line.endswith((';', '(')) or line.startswith((')', 'command '))
+                   for line in body)
+        assert body[-1] == 'return $TF_STATUS;'
+
     def test_no_executable_alias_when_alias_is_oopsh(self, shell):
         assert 'TF_ARG' not in shell.app_alias('oopsh')
 
