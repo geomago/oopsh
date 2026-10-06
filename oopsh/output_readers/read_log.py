@@ -63,6 +63,15 @@ def _skip_old_lines(log_file):
         log_file.seek(size - const.LOG_SIZE_IN_BYTES)
 
 
+def _is_trusted_log(fd):
+    """The log must belong to the user and not be writable by others,
+    otherwise someone else could plant the output rules build commands from."""
+    if not hasattr(os, 'getuid'):
+        return True
+    stat = os.fstat(fd)
+    return stat.st_uid == os.getuid() and not stat.st_mode & 0o022
+
+
 def get_output(script):
     """Reads script output from log.
 
@@ -83,6 +92,10 @@ def get_output(script):
     try:
         with logs.debug_time(u'Read output from log'):
             fd = os.open(os.environ['OOPSH_OUTPUT_LOG'], os.O_RDONLY)
+            if not _is_trusted_log(fd):
+                os.close(fd)
+                logs.warn("Output log is writable by other users, not using it")
+                return None
             buffer = mmap.mmap(fd, const.LOG_SIZE_IN_BYTES, mmap.MAP_SHARED, mmap.PROT_READ)
             _skip_old_lines(buffer)
             lines = _get_output_lines(script, buffer)

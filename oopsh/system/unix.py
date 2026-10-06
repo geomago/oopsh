@@ -1,4 +1,5 @@
 import os
+import shlex
 import sys
 import tty
 import termios
@@ -39,9 +40,10 @@ def get_key():
 
 
 def open_command(arg):
+    # `arg` can come from a command's output: never let it run as shell code
     if which('xdg-open'):
-        return 'xdg-open ' + arg
-    return 'open ' + arg
+        return 'xdg-open ' + shlex.quote(arg)
+    return 'open ' + shlex.quote(arg)
 
 
 def _expanduser(self):

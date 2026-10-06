@@ -25,7 +25,11 @@ def get_key():
 
 
 def open_command(arg):
-    return 'cmd /c start ' + arg
+    # `arg` can come from a command's output: drop the characters cmd.exe
+    # treats specially, and quote it (the empty title keeps `start` from
+    # taking the quoted argument as the window title)
+    arg = ''.join(char for char in arg if char not in '"&|<>^%!')
+    return 'cmd /c start "" "{}"'.format(arg)
 
 
 def _expanduser(self):

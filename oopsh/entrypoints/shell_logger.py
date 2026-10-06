@@ -71,7 +71,11 @@ def shell_logger(output):
         logs.warn("Shell logger doesn't support your platform.")
         sys.exit(1)
 
-    fd = os.open(output, os.O_CREAT | os.O_TRUNC | os.O_RDWR)
+    # The log holds everything shown in the terminal: only the user may read
+    # it, and a symlink planted at its path must not be followed
+    fd = os.open(output, os.O_CREAT | os.O_TRUNC | os.O_RDWR
+                 | getattr(os, 'O_NOFOLLOW', 0), 0o600)
+    os.fchmod(fd, 0o600)  # the mode above only applies to new files
     os.write(fd, b'\x00' * const.LOG_SIZE_IN_BYTES)
     buffer = mmap.mmap(fd, const.LOG_SIZE_IN_BYTES, mmap.MAP_SHARED, mmap.PROT_WRITE)
     return_code = _spawn(os.environ['SHELL'], partial(_read, buffer))
