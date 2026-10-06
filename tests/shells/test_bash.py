@@ -121,3 +121,19 @@ class TestBash(object):
         with pytest.raises(OSError):
             shell._get_version()
         assert Popen.call_args[0][0] == ['bash', '-c', 'echo $BASH_VERSION']
+
+
+@pytest.mark.usefixtures('no_memoize')
+def test_get_aliases_with_multiline_alias(os_environ):
+    """nvbn/thefuck#1541: `alias` prints multi-line values over several lines."""
+    from oopsh.shells import Bash
+    os_environ['TF_SHELL_ALIASES'] = (
+        "alias arg:help='\n"
+        'case "$1" in\n'
+        '    --help|-h)  shift; x_cmd help "$@" ;;\n'
+        "esac\n"
+        "'\n"
+        "alias l='ls -CF'")
+    aliases = Bash().get_aliases()
+    assert aliases['l'] == 'ls -CF'
+    assert 'arg:help' in aliases
