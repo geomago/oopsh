@@ -389,6 +389,7 @@ The following rules are enabled by default on specific platforms only:
 * `brew_update_formula` &ndash; turns `brew update <formula>` into `brew upgrade <formula>`;
 * `dnf_no_such_command` &ndash; fixes mistyped DNF commands;
 * `docker_daemon_not_running` &ndash; starts the Docker daemon with `systemctl` and runs the command again;
+* `nix_shell` &ndash; runs a missing command in a `nix-shell` with the package that provides it;
 * `nixos_cmd_not_found` &ndash; installs apps on NixOS;
 * `pacman` &ndash; installs app with `pacman` if it is not installed (uses `yay`, `pikaur`, `yaourt` or `paru` if available);
 * `pacman_invalid_option` &ndash; replaces lowercase `pacman` options with uppercase.
