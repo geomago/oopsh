@@ -14,7 +14,7 @@ from .fix_command import fix_command  # noqa: E402
 from .migrate import migrate  # noqa: E402
 
 
-def main():
+def _main():
     parser = Parser()
     known_args = parser.parse(sys.argv)
 
@@ -41,3 +41,14 @@ def main():
             shell_logger(known_args.shell_logger)
     else:
         parser.print_usage()
+
+
+def main():
+    try:
+        _main()
+    except BrokenPipeError:
+        # The reader went away (e.g. `oopsh --help | head -1` or the terminal
+        # was closed): silence the rest of the output and exit cleanly
+        devnull = os.open(os.devnull, os.O_WRONLY)
+        os.dup2(devnull, sys.stdout.fileno())
+        sys.exit(0)
