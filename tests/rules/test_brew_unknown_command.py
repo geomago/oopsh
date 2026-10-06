@@ -24,8 +24,9 @@ def brew_unknown_cmd_outdated():
     return '''Error: Unknown command: outdate'''
 
 
-def test_match(brew_unknown_cmd):
+def test_match(brew_unknown_cmd, brew_unknown_cmd2):
     assert match(Command('brew inst', brew_unknown_cmd))
+    assert match(Command('brew instaa', brew_unknown_cmd2))
     for command in _brew_commands():
         assert not match(Command('brew ' + command, ''))
 
