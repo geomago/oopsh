@@ -44,6 +44,10 @@ class TestBash(object):
     def test_or_(self, shell):
         assert shell.or_('ls', 'cd') == 'ls || cd'
 
+    def test_get_aliases_with_empty_value(self, shell, os_environ):
+        os_environ['TF_SHELL_ALIASES'] = "alias empty=\nalias l='ls -CF'"
+        assert shell.get_aliases() == {'empty': '', 'l': 'ls -CF'}
+
     def test_get_aliases(self, shell):
         assert shell.get_aliases() == {'fuck': 'eval $(oopsh $(fc -ln -1))',
                                        'l': 'ls -CF',
