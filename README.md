@@ -330,6 +330,7 @@ following rules are enabled by default:
 * `quotation_marks` &ndash; fixes uneven usage of `'` and `"` when containing args';
 * `path_from_history` &ndash; replaces not found path with a similar absolute path from history;
 * `rails_migrations_pending` &ndash; runs pending migrations;
+* `rbenv_install` &ndash; fixes ruby-build definition not found by updating ruby-build;
 * `react_native_command_unrecognized` &ndash; fixes unrecognized `react-native` commands;
 * `remove_shell_prompt_literal` &ndash; removes leading shell prompt symbol `$`, common when copying commands from documentations;
 * `remove_trailing_cedilla` &ndash; removes trailing cedillas `ç`, a common typo for European keyboard layouts;
