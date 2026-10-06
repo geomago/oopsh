@@ -3,8 +3,8 @@
 import pytest
 import os
 from collections import namedtuple
-from thefuck.rules.fix_file import match, get_new_command
-from thefuck.types import Command
+from oopsh.rules.fix_file import match, get_new_command
+from oopsh.types import Command
 
 FixFileTest = namedtuple('FixFileTest', ['script', 'file', 'line', 'col', 'output'])
 

@@ -3,13 +3,15 @@ requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "thefuck"
-version = "3.32"
-description = "Magnificent app which corrects your previous console command"
+name = "oopsh"
+version = "1.0.0.dev0"
+description = "Corrects your previous console command. A maintained fork of thefuck."
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE.md"]
 authors = [{ name = "Vladimir Iakovlev", email = "nvbn.rm@gmail.com" }]
+maintainers = [{ name = "Giorgio Di Falco" }]
+keywords = ["shell", "command-line", "typo", "thefuck", "thefuck alternative", "maintained fork"]
 requires-python = ">=3.10"
 dependencies = ["colorama", "decorator", "psutil", "pyte"]
 classifiers = [
@@ -28,8 +30,8 @@ Homepage = "https://github.com/geomago/oopsh"
 Issues = "https://github.com/geomago/oopsh/issues"
 
 [project.scripts]
-thefuck = "thefuck.entrypoints.main:main"
-fuck = "thefuck.entrypoints.not_configured:main"
+oopsh = "oopsh.entrypoints.main:main"
+oops = "oopsh.entrypoints.not_configured:main"
 
 [dependency-groups]
 test = [
@@ -43,7 +45,7 @@ lint = ["flake8"]
 dev = [{ include-group = "test" }, { include-group = "lint" }]
 
 [tool.setuptools.packages.find]
-include = ["thefuck*"]
+include = ["oopsh*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

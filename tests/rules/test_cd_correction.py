@@ -1,6 +1,6 @@
 import pytest
-from thefuck.rules.cd_correction import match
-from thefuck.types import Command
+from oopsh.rules.cd_correction import match
+from oopsh.types import Command
 
 
 @pytest.mark.parametrize('command', [

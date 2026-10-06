@@ -1,6 +1,6 @@
 import pytest
-from thefuck.rules.choco_install import match, get_new_command
-from thefuck.types import Command
+from oopsh.rules.choco_install import match, get_new_command
+from oopsh.types import Command
 
 
 package_not_found_error = (

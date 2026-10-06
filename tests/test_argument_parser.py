@@ -1,6 +1,6 @@
 import pytest
-from thefuck.argument_parser import Parser
-from thefuck.const import ARGUMENT_PLACEHOLDER
+from oopsh.argument_parser import Parser
+from oopsh.const import ARGUMENT_PLACEHOLDER
 
 
 def _args(**override):
@@ -14,23 +14,23 @@ def _args(**override):
 
 
 @pytest.mark.parametrize('argv, result', [
-    (['thefuck'], _args()),
-    (['thefuck', '-a'], _args(alias='fuck')),
-    (['thefuck', '--alias', '--enable-experimental-instant-mode'],
-     _args(alias='fuck', enable_experimental_instant_mode=True)),
-    (['thefuck', '-a', 'fix'], _args(alias='fix')),
-    (['thefuck', 'git', 'branch', ARGUMENT_PLACEHOLDER, '-y'],
+    (['oopsh'], _args()),
+    (['oopsh', '-a'], _args(alias='oops')),
+    (['oopsh', '--alias', '--enable-experimental-instant-mode'],
+     _args(alias='oops', enable_experimental_instant_mode=True)),
+    (['oopsh', '-a', 'fix'], _args(alias='fix')),
+    (['oopsh', 'git', 'branch', ARGUMENT_PLACEHOLDER, '-y'],
      _args(command=['git', 'branch'], yes=True)),
-    (['thefuck', 'git', 'branch', '-a', ARGUMENT_PLACEHOLDER, '-y'],
+    (['oopsh', 'git', 'branch', '-a', ARGUMENT_PLACEHOLDER, '-y'],
      _args(command=['git', 'branch', '-a'], yes=True)),
-    (['thefuck', ARGUMENT_PLACEHOLDER, '-v'], _args(version=True)),
-    (['thefuck', ARGUMENT_PLACEHOLDER, '--help'], _args(help=True)),
-    (['thefuck', 'git', 'branch', '-a', ARGUMENT_PLACEHOLDER, '-y', '-d'],
+    (['oopsh', ARGUMENT_PLACEHOLDER, '-v'], _args(version=True)),
+    (['oopsh', ARGUMENT_PLACEHOLDER, '--help'], _args(help=True)),
+    (['oopsh', 'git', 'branch', '-a', ARGUMENT_PLACEHOLDER, '-y', '-d'],
      _args(command=['git', 'branch', '-a'], yes=True, debug=True)),
-    (['thefuck', 'git', 'branch', '-a', ARGUMENT_PLACEHOLDER, '-r', '-d'],
+    (['oopsh', 'git', 'branch', '-a', ARGUMENT_PLACEHOLDER, '-r', '-d'],
      _args(command=['git', 'branch', '-a'], repeat=True, debug=True)),
-    (['thefuck', '-l', '/tmp/log'], _args(shell_logger='/tmp/log')),
-    (['thefuck', '--shell-logger', '/tmp/log'],
+    (['oopsh', '-l', '/tmp/log'], _args(shell_logger='/tmp/log')),
+    (['oopsh', '--shell-logger', '/tmp/log'],
      _args(shell_logger='/tmp/log'))])
 def test_parse(argv, result):
     assert vars(Parser().parse(argv)) == result

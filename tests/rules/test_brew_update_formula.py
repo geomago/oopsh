@@ -1,6 +1,6 @@
 import pytest
-from thefuck.types import Command
-from thefuck.rules.brew_update_formula import get_new_command, match
+from oopsh.types import Command
+from oopsh.rules.brew_update_formula import get_new_command, match
 
 
 output = ("Error: This command updates brew itself, and does not take formula"
@@ -8,7 +8,7 @@ output = ("Error: This command updates brew itself, and does not take formula"
 
 
 def test_match():
-    command = Command('brew update thefuck', output)
+    command = Command('brew update oopsh', output)
     assert match(command)
 
 

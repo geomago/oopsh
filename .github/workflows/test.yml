@@ -53,6 +53,6 @@ jobs:
           python -m pip install -U pip
           pip install -e . --group test
       - name: Build test container
-        run: docker build -t thefuck/python3 -f tests/Dockerfile .
+        run: docker build -t oopsh/python3 -f tests/Dockerfile .
       - name: Run functional tests
         run: pytest -v --capture=sys --enable-functional tests/functional

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-from thefuck.shells import Powershell
+from oopsh.shells import Powershell
 
 
 @pytest.mark.usefixtures('isfile', 'no_memoize', 'no_cache')
@@ -12,7 +12,7 @@ class TestPowershell(object):
 
     @pytest.fixture(autouse=True)
     def Popen(self, mocker):
-        mock = mocker.patch('thefuck.shells.powershell.Popen')
+        mock = mocker.patch('oopsh.shells.powershell.Popen')
         return mock
 
     def test_and_(self, shell):
@@ -21,7 +21,20 @@ class TestPowershell(object):
     def test_app_alias(self, shell):
         assert 'function fuck' in shell.app_alias('fuck')
         assert 'function FUCK' in shell.app_alias('FUCK')
-        assert 'thefuck' in shell.app_alias('fuck')
+        assert 'oopsh' in shell.app_alias('fuck')
+
+    def test_app_alias_calls_executable(self, shell):
+        assert '$(& (Get-Command -CommandType Application oopsh' \
+            in shell.app_alias('oops')
+
+    def test_executable_alias(self, shell):
+        alias = shell.app_alias('oops')
+        assert 'function oopsh {' in alias
+        assert "-cmatch '^(-a|--alias|" in alias
+        assert '        oops @args\n' in alias
+
+    def test_no_executable_alias_when_alias_is_oopsh(self, shell):
+        assert '-cmatch' not in shell.app_alias('oopsh')
 
     def test_how_to_configure(self, shell):
         assert not shell.how_to_configure().can_configure_automatically

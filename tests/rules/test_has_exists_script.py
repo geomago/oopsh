@@ -1,6 +1,6 @@
 from unittest.mock import patch
-from thefuck.rules.has_exists_script import match, get_new_command
-from thefuck.types import Command
+from oopsh.rules.has_exists_script import match, get_new_command
+from oopsh.types import Command
 
 
 def test_match():

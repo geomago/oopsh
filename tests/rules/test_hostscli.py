@@ -1,6 +1,6 @@
 import pytest
-from thefuck.rules.hostscli import no_website, get_new_command, match
-from thefuck.types import Command
+from oopsh.rules.hostscli import no_website, get_new_command, match
+from oopsh.types import Command
 
 no_website_long = '''
 {}:

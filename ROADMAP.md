@@ -25,7 +25,7 @@ Once installed, you type `oops` (or `oopsh`) to fix the previous command.
 - [x] Move to `pyproject.toml` (PEP 621) with PEP 735 dependency groups; drop `setup.py`,
       `fastentrypoints.py`, `release.py`, `requirements.txt`
 - [x] New CI on GitHub Actions: Python 3.10–3.14 × Linux/macOS/Windows, lint, functional tests in Docker
-- [ ] Bring the functional tests (`tests/functional`) back to green
+- [x] Bring the functional tests (`tests/functional`) back to green
 
 ## Milestone 2: Rebrand to oopsh
 
@@ -34,24 +34,24 @@ The command layout:
 | Piece                 | thefuck                          | oopsh                              |
 |-----------------------|----------------------------------|------------------------------------|
 | PyPI package          | `thefuck`                        | `oopsh`                            |
-| Python package        | `thefuck`                        | `oopsh` (+ `thefuck` compat shim)  |
+| Python package        | `thefuck`                        | `oopsh` (+ `thefuck` compat shim, M3) |
 | Executable            | `thefuck`                        | `oopsh`                            |
 | Shell function        | `fuck`                           | `oops`, plus `oopsh`               |
 | Shell setup           | `eval "$(thefuck --alias)"`      | `eval "$(oopsh --alias)"`          |
 | Config dir            | `~/.config/thefuck/`             | `~/.config/oopsh/`                 |
 | Env vars              | `THEFUCK_*`                      | `OOPSH_*`                          |
 
-- [ ] Rename the Python package to `oopsh` and the entry points to `oopsh` / `oopsh_firstuse`
-- [ ] `--alias` generates both the `oops` and the `oopsh` shell functions. The `oopsh` function
-      shadows the executable, so the generated code must call the binary via `command oopsh`
-      (bash/zsh) or the equivalent in fish, PowerShell, tcsh
-- [ ] Update the first-run setup (`not_configured`) for the new names, on every supported shell
+- [x] Rename the Python package to `oopsh` and the entry points to `oopsh` (main) / `oops` (first run)
+- [x] `--alias` generates both the `oops` and the `oopsh` shell functions (bash, zsh, fish, PowerShell).
+      `oopsh` passes executable arguments (`--alias`, `--version`, `--help`, …) to the binary,
+      everything else to `oops`. tcsh and generic POSIX shells get `oops` only
+- [x] Update the first-run setup (`not_configured`) for the new names
 - [ ] Windows: the published wheels never installed `scripts/fuck.bat` / `fuck.ps1` (they were only
       added by `setup.py` when built on Windows). Decide whether to ship `oops.bat` / `oops.ps1`
       for cmd users or drop them
-- [ ] Rename the user-facing env vars `THEFUCK_*` → `OOPSH_*`
-- [ ] Rewrite the README: new name, "Based on thefuck by Vladimir Iakovlev", no original logo or gifs
-- [ ] Add our copyright line to `LICENSE.md`, keeping the original one
+- [x] Rename the user-facing env vars `THEFUCK_*` → `OOPSH_*`
+- [x] Rewrite the README: new name, "Based on thefuck by Vladimir Iakovlev", no original logo or gifs
+- [x] Add our copyright line to `LICENSE.md`, keeping the original one
 
 ## Milestone 3: Painless migration from thefuck
 

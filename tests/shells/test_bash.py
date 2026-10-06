@@ -2,7 +2,7 @@
 
 import os
 import pytest
-from thefuck.shells import Bash
+from oopsh.shells import Bash
 
 
 @pytest.mark.usefixtures('isfile', 'no_memoize', 'no_cache')
@@ -13,20 +13,20 @@ class TestBash(object):
 
     @pytest.fixture(autouse=True)
     def Popen(self, mocker):
-        mock = mocker.patch('thefuck.shells.bash.Popen')
+        mock = mocker.patch('oopsh.shells.bash.Popen')
         return mock
 
     @pytest.fixture(autouse=True)
     def shell_aliases(self):
         os.environ['TF_SHELL_ALIASES'] = (
-            'alias fuck=\'eval $(thefuck $(fc -ln -1))\'\n'
+            'alias fuck=\'eval $(oopsh $(fc -ln -1))\'\n'
             'alias l=\'ls -CF\'\n'
             'alias la=\'ls -A\'\n'
             'alias ll=\'ls -alF\'')
 
     @pytest.mark.parametrize('before, after', [
         ('pwd', 'pwd'),
-        ('fuck', 'eval $(thefuck $(fc -ln -1))'),
+        ('fuck', 'eval $(oopsh $(fc -ln -1))'),
         ('awk', 'awk'),
         ('ll', 'ls -alF')])
     def test_from_shell(self, before, after, shell):
@@ -42,7 +42,7 @@ class TestBash(object):
         assert shell.or_('ls', 'cd') == 'ls || cd'
 
     def test_get_aliases(self, shell):
-        assert shell.get_aliases() == {'fuck': 'eval $(thefuck $(fc -ln -1))',
+        assert shell.get_aliases() == {'fuck': 'eval $(oopsh $(fc -ln -1))',
                                        'l': 'ls -CF',
                                        'la': 'ls -A',
                                        'll': 'ls -alF'}
@@ -50,8 +50,21 @@ class TestBash(object):
     def test_app_alias(self, shell):
         assert 'fuck () {' in shell.app_alias('fuck')
         assert 'FUCK () {' in shell.app_alias('FUCK')
-        assert 'thefuck' in shell.app_alias('fuck')
+        assert 'oopsh' in shell.app_alias('fuck')
         assert 'PYTHONIOENCODING' in shell.app_alias('fuck')
+
+    def test_app_alias_calls_executable(self, shell):
+        assert 'command oopsh OOPSH_ARGUMENT_PLACEHOLDER' in shell.app_alias('oops')
+
+    def test_executable_alias(self, shell):
+        alias = shell.app_alias('oops')
+        assert 'oopsh () {' in alias
+        assert '-a|--alias|' in alias
+        assert ') command oopsh "$@" ;;' in alias
+        assert '*) oops "$@" ;;' in alias
+
+    def test_no_executable_alias_when_alias_is_oopsh(self, shell):
+        assert 'case "$1"' not in shell.app_alias('oopsh')
 
     def test_app_alias_variables_correctly_set(self, shell):
         alias = shell.app_alias('fuck')

@@ -1,7 +1,7 @@
 import pytest
-from thefuck.rules.yarn_help import match, get_new_command
-from thefuck.types import Command
-from thefuck.system import open_command
+from oopsh.rules.yarn_help import match, get_new_command
+from oopsh.types import Command
+from oopsh.system import open_command
 
 
 output_clean = '''

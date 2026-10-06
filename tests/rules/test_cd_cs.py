@@ -1,5 +1,5 @@
-from thefuck.rules.cd_cs import match, get_new_command
-from thefuck.types import Command
+from oopsh.rules.cd_cs import match, get_new_command
+from oopsh.types import Command
 
 
 def test_match():

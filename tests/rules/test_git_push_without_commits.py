@@ -1,5 +1,5 @@
-from thefuck.types import Command
-from thefuck.rules.git_push_without_commits import get_new_command, match
+from oopsh.types import Command
+from oopsh.rules.git_push_without_commits import get_new_command, match
 
 
 def test_match():

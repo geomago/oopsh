@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-from thefuck.const import ARGUMENT_PLACEHOLDER
-from thefuck.shells import Fish
+from oopsh.const import ARGUMENT_PLACEHOLDER
+from oopsh.shells import Fish
 
 
 @pytest.mark.usefixtures('isfile', 'no_memoize', 'no_cache')
@@ -13,7 +13,7 @@ class TestFish(object):
 
     @pytest.fixture(autouse=True)
     def Popen(self, mocker):
-        mock = mocker.patch('thefuck.shells.fish.Popen')
+        mock = mocker.patch('oopsh.shells.fish.Popen')
         mock.return_value.stdout.read.side_effect = [(
             b'cd\nfish_config\nfuck\nfunced\nfuncsave\ngrep\nhistory\nll\nls\n'
             b'man\nmath\npopd\npushd\nruby'),
@@ -23,10 +23,10 @@ class TestFish(object):
 
     @pytest.mark.parametrize('key, value', [
         ('TF_OVERRIDDEN_ALIASES', 'cut,git,sed'),  # legacy
-        ('THEFUCK_OVERRIDDEN_ALIASES', 'cut,git,sed'),
-        ('THEFUCK_OVERRIDDEN_ALIASES', 'cut, git, sed'),
-        ('THEFUCK_OVERRIDDEN_ALIASES', ' cut,\tgit,sed\n'),
-        ('THEFUCK_OVERRIDDEN_ALIASES', '\ncut,\n\ngit,\tsed\r')])
+        ('OOPSH_OVERRIDDEN_ALIASES', 'cut,git,sed'),
+        ('OOPSH_OVERRIDDEN_ALIASES', 'cut, git, sed'),
+        ('OOPSH_OVERRIDDEN_ALIASES', ' cut,\tgit,sed\n'),
+        ('OOPSH_OVERRIDDEN_ALIASES', '\ncut,\n\ngit,\tsed\r')])
     def test_get_overridden_aliases(self, shell, os_environ, key, value):
         os_environ[key] = value
         overridden = shell._get_overridden_aliases()
@@ -79,16 +79,26 @@ class TestFish(object):
     def test_app_alias(self, shell):
         assert 'function fuck' in shell.app_alias('fuck')
         assert 'function FUCK' in shell.app_alias('FUCK')
-        assert 'thefuck' in shell.app_alias('fuck')
+        assert 'oopsh' in shell.app_alias('fuck')
         assert 'TF_SHELL=fish' in shell.app_alias('fuck')
         assert 'TF_ALIAS=fuck PYTHONIOENCODING' in shell.app_alias('fuck')
-        assert 'PYTHONIOENCODING=utf-8 thefuck' in shell.app_alias('fuck')
+        assert 'PYTHONIOENCODING=utf-8 oopsh' in shell.app_alias('fuck')
         assert ARGUMENT_PLACEHOLDER in shell.app_alias('fuck')
+
+    def test_executable_alias(self, shell):
+        alias = shell.app_alias('oops')
+        assert 'function oopsh' in alias
+        assert "case -a --alias" in alias
+        assert "'--alias=*' '--shell-logger=*'\n      command oopsh $argv" in alias
+        assert "case '*'\n      oops $argv" in alias
+
+    def test_no_executable_alias_when_alias_is_oopsh(self, shell):
+        assert 'switch' not in shell.app_alias('oopsh')
 
     def test_app_alias_alter_history(self, settings, shell):
         settings.alter_history = True
         assert (
-            'builtin history delete --exact --case-sensitive -- $fucked_up_command\n'
+            'builtin history delete --exact --case-sensitive -- $previous_command\n'
             in shell.app_alias('FUCK')
         )
         assert 'builtin history merge\n' in shell.app_alias('FUCK')
@@ -105,7 +115,7 @@ class TestFish(object):
         ('ls', '- cmd: ls\n   when: 1430707243\n'),
         (u'echo café', '- cmd: echo café\n   when: 1430707243\n')])
     def test_put_to_history(self, entry, entry_utf8, builtins_open, mocker, shell):
-        mocker.patch('thefuck.shells.fish.time', return_value=1430707243.3517463)
+        mocker.patch('oopsh.shells.fish.time', return_value=1430707243.3517463)
         shell.put_to_history(entry)
         builtins_open.return_value.__enter__.return_value. \
             write.assert_called_once_with(entry_utf8)

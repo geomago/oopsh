@@ -1,6 +1,6 @@
 import pytest
-from thefuck.rules.mvn_no_command import match, get_new_command
-from thefuck.types import Command
+from oopsh.rules.mvn_no_command import match, get_new_command
+from oopsh.types import Command
 
 
 @pytest.mark.parametrize('command', [
