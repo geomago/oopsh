@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os
+import shutil
+import subprocess
 import pytest
 from oopsh.shells.zsh import Zsh
 
@@ -59,12 +61,24 @@ class TestZsh(object):
     def test_executable_alias(self, shell):
         alias = shell.app_alias('oops')
         assert 'oopsh () {' in alias
-        assert '-a|--alias|' in alias
-        assert ') command oopsh "$@" ;;' in alias
-        assert '*) oops "$@" ;;' in alias
+        assert 'for TF_ARG in -a --alias -v --version' in alias
+        assert 'command oopsh "$@";' in alias
+        assert 'oops "$@";' in alias
+
+    def test_executable_alias_has_no_glob_characters(self, shell):
+        alias = shell._executable_alias('oops')
+        assert '*' not in alias.replace('${1%%=*}', '')
+        assert '?' not in alias and '[' not in alias.replace('[ ', '')
+
+    @pytest.mark.skipif(shutil.which('zsh') is None, reason='needs zsh')
+    @pytest.mark.parametrize('alias_name', ['oops', 'oopsh'])
+    def test_alias_is_valid_unquoted(self, shell, alias_name):
+        """`eval $(oopsh --alias)` joins the alias on one line."""
+        one_line = ' '.join(shell.app_alias(alias_name).split())
+        subprocess.check_call(['zsh', '-n', '-c', one_line])
 
     def test_no_executable_alias_when_alias_is_oopsh(self, shell):
-        assert 'case "$1"' not in shell.app_alias('oopsh')
+        assert 'TF_ARG' not in shell.app_alias('oopsh')
 
     def test_app_alias_variables_correctly_set(self, shell):
         alias = shell.app_alias('fuck')

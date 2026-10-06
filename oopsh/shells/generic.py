@@ -5,6 +5,7 @@ from collections import namedtuple
 from ..logs import warn
 from ..utils import memoize
 from ..conf import settings
+from ..const import EXECUTABLE, EXECUTABLE_ARGUMENTS
 from ..system import Path
 
 
@@ -37,6 +38,31 @@ class Generic(object):
     def app_alias(self, alias_name):
         return """alias {0}='eval "$(TF_ALIAS={0} PYTHONIOENCODING=utf-8 """ \
                """oopsh "$(fc -ln -1)")"'""".format(alias_name)
+
+    def _executable_alias(self, alias_name):
+        """`oopsh` as a second name for the alias, for POSIX-like shells.
+
+        Arguments meant for the executable (like `--alias` in the shell
+        config) go to it instead. Every line ends with `;` or a keyword,
+        and there are no glob characters, so the function still works
+        when it's eval'ed unquoted, joined on one line: `eval $(oopsh --alias)`.
+
+        """
+        if alias_name == EXECUTABLE:
+            return ''
+        return '''
+            {executable} () {{
+                local TF_ARG;
+                for TF_ARG in {arguments}; do
+                    if [ "$1" = "$TF_ARG" ] || [ "${{1%%=*}}" = "$TF_ARG" ]; then
+                        command {executable} "$@";
+                        return;
+                    fi;
+                done;
+                {name} "$@";
+            }}
+        '''.format(name=alias_name, executable=EXECUTABLE,
+                   arguments=' '.join(EXECUTABLE_ARGUMENTS))
 
     def instant_mode_alias(self, alias_name):
         warn("Instant mode not supported by your shell")

@@ -3,8 +3,7 @@ from subprocess import Popen, PIPE
 from tempfile import gettempdir
 from uuid import uuid4
 from ..conf import settings
-from ..const import ARGUMENT_PLACEHOLDER, EXECUTABLE, \
-    EXECUTABLE_ARGUMENTS, USER_COMMAND_MARK
+from ..const import ARGUMENT_PLACEHOLDER, EXECUTABLE, USER_COMMAND_MARK
 from ..utils import DEVNULL, memoize
 from .generic import Generic
 
@@ -28,7 +27,7 @@ class Bash(Generic):
                 unset TF_HISTORY;
                 export PYTHONIOENCODING=$TF_PYTHONIOENCODING;
                 {alter_history}
-            }}
+            }};
         '''.format(
             name=alias_name,
             executable=EXECUTABLE,
@@ -36,24 +35,6 @@ class Bash(Generic):
             alter_history=('history -s $TF_CMD;'
                            if settings.alter_history else '')) \
             + self._executable_alias(alias_name)
-
-    def _executable_alias(self, alias_name):
-        """`oopsh` as a second name for the alias. Arguments meant for the
-        executable (like `--alias` in the shell config) go to it instead."""
-        if alias_name == EXECUTABLE:
-            return ''
-        return '''
-            function {executable} () {{
-                case "$1" in
-                    {patterns}) command {executable} "$@" ;;
-                    *) {name} "$@" ;;
-                esac
-            }}
-        '''.format(
-            name=alias_name,
-            executable=EXECUTABLE,
-            patterns='|'.join(EXECUTABLE_ARGUMENTS
-                              + ['--alias=*', '--shell-logger=*']))
 
     def instant_mode_alias(self, alias_name):
         if os.environ.get('OOPSH_INSTANT_MODE', '').lower() == 'true':
