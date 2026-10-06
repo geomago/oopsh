@@ -350,6 +350,7 @@ following rules are enabled by default:
 * `switch_lang` &ndash; switches command from your local layout to en;
 * `systemctl` &ndash; correctly orders parameters of confusing `systemctl`;
 * `terraform_init.py` &ndash; runs `terraform init` before plan or apply;
+* `terraform_init_upgrade` &ndash; runs `terraform init -upgrade` when the dependency lock file is out of date, then the command again;
 * `terraform_no_command.py` &ndash; fixes unrecognized `terraform` commands;
 * `test.py` &ndash; runs `pytest` instead of `test.py`;
 * `touch` &ndash; creates missing directories before "touching";
