@@ -221,3 +221,14 @@ def test_get_new_command_with_settings(mocker, monkeypatch, test, settings):
     else:
         assert (get_new_command(cmd) ==
                 u'dummy_editor {} +{} && {}'.format(test.file, test.line, test.script))
+
+
+@pytest.mark.parametrize('output', [
+    '/bin/sh: line 1: pacmn: command not found',
+    '/usr/bin/bash: line 1: pacmn: command not found',
+    '/nix/store/p6dlr3skfhxp-bash-5.2-p15/bin/sh: line 1: lsof: command not found'])
+def test_not_match_shell_errors(mocker, monkeypatch, output):
+    """nvbn/thefuck#1153: don't offer to edit the shell itself."""
+    mocker.patch('os.path.isfile', return_value=True)
+    monkeypatch.setenv('EDITOR', 'dummy_editor')
+    assert not match(Command('pacmn', output))

@@ -44,12 +44,18 @@ def _make_pattern(pattern):
 
 patterns = [_make_pattern(p).search for p in patterns]
 
+# `/bin/sh: line 1: foo: command not found` is an error of the command, not
+# of the shell binary, which we must not offer to edit
+SHELLS = {'sh', 'bash', 'dash', 'zsh', 'ksh', 'mksh', 'fish', 'tcsh', 'csh',
+          'busybox'}
+
 
 @memoize
 def _search(output):
     for pattern in patterns:
         m = pattern(output)
-        if m and os.path.isfile(m.group('file')):
+        if m and os.path.isfile(m.group('file')) \
+                and os.path.basename(m.group('file')) not in SHELLS:
             return m
 
 
