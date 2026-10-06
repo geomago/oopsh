@@ -1,3 +1,5 @@
+import os
+
 import pytest
 
 from oopsh.rules.edit_filename import EDITORS, get_new_command, match
@@ -6,8 +8,15 @@ from oopsh.types import Command
 parametrize_editor = pytest.mark.parametrize("editor", EDITORS)
 
 
+@pytest.fixture(autouse=True)
+def cwd(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+
+
 def _edit_command(editor, path):
-    return Command(editor + " " + str(path), "")
+    """Uses paths relative to the current dir, as typed in practice (and
+    without Windows backslashes, that shell-like splitting would eat)."""
+    return Command(editor + " " + os.path.relpath(path).replace(os.sep, "/"), "")
 
 
 @parametrize_editor
