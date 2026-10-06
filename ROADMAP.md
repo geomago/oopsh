@@ -17,12 +17,14 @@ Once installed, you type `oops` (or `oopsh`) to fix the previous command.
 
 ## Milestone 1: Modern toolchain
 
-- [ ] Make the tests work with pytest 8 (currently fails with "Marks cannot be applied to fixtures")
-- [ ] Fix the ~270 DeprecationWarnings (e.g. positional `count` in `re.sub`)
-- [ ] Drop Python 2.7 and other EOL versions. Minimum: Python 3.10
-- [ ] Remove the compatibility shims for `imp` and `pkg_resources` and the `six`/`py2` branches
-- [ ] Move to `pyproject.toml` (PEP 621), drop `setup.py`, `fastentrypoints.py`, `release.py`
-- [ ] New CI on GitHub Actions: Python 3.10–3.14 × Linux/macOS/Windows, lint, functional tests in Docker
+- [x] Make the tests work with pytest 8+ (tested up to pytest 9.1)
+- [x] Fix the ~270 DeprecationWarnings (e.g. positional `count` in `re.sub`)
+- [x] Drop Python 2.7 and other EOL versions. Minimum: Python 3.10
+- [x] Remove `six`, the `py2` branches and the `imp`, `pkg_resources`, `pathlib2`,
+      `backports.*` and `win_unicode_console` fallbacks
+- [x] Move to `pyproject.toml` (PEP 621) with PEP 735 dependency groups; drop `setup.py`,
+      `fastentrypoints.py`, `release.py`, `requirements.txt`
+- [x] New CI on GitHub Actions: Python 3.10–3.14 × Linux/macOS/Windows, lint, functional tests in Docker
 - [ ] Bring the functional tests (`tests/functional`) back to green
 
 ## Milestone 2: Rebrand to oopsh
@@ -44,6 +46,9 @@ The command layout:
       shadows the executable, so the generated code must call the binary via `command oopsh`
       (bash/zsh) or the equivalent in fish, PowerShell, tcsh
 - [ ] Update the first-run setup (`not_configured`) for the new names, on every supported shell
+- [ ] Windows: the published wheels never installed `scripts/fuck.bat` / `fuck.ps1` (they were only
+      added by `setup.py` when built on Windows). Decide whether to ship `oops.bat` / `oops.ps1`
+      for cmd users or drop them
 - [ ] Rename the user-facing env vars `THEFUCK_*` → `OOPSH_*`
 - [ ] Rewrite the README: new name, "Based on thefuck by Vladimir Iakovlev", no original logo or gifs
 - [ ] Add our copyright line to `LICENSE.md`, keeping the original one

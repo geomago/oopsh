@@ -23,7 +23,11 @@ def tar_error(tmpdir):
                     os.remove(file)
 
             with tarfile.TarFile(path, 'r') as archive:
-                archive.extractall(filter='data')
+                # The extraction filter exists only since Python 3.10.12
+                if hasattr(tarfile, 'data_filter'):
+                    archive.extractall(filter='data')
+                else:
+                    archive.extractall()
 
         os.chdir(str(tmpdir))
         reset(path)
