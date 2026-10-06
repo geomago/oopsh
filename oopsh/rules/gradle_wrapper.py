@@ -1,5 +1,5 @@
 import os
-from oopsh.utils import for_app, which
+from oopsh.utils import for_app, replace_command_name, which
 
 
 @for_app('gradle')
@@ -10,4 +10,4 @@ def match(command):
 
 
 def get_new_command(command):
-    return u'./gradlew {}'.format(' '.join(command.script_parts[1:]))
+    return replace_command_name(command.script, './gradlew')

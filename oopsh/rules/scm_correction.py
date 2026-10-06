@@ -1,4 +1,4 @@
-from oopsh.utils import for_app, memoize
+from oopsh.utils import for_app, memoize, replace_command_name
 from oopsh.system import Path
 
 path_to_scm = {
@@ -29,4 +29,4 @@ def match(command):
 
 def get_new_command(command):
     scm = _get_actual_scm()
-    return u' '.join([scm] + command.script_parts[1:])
+    return replace_command_name(command.script, scm)

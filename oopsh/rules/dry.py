@@ -1,3 +1,6 @@
+from oopsh.utils import replace_command_name
+
+
 def match(command):
     split_command = command.script_parts
 
@@ -7,7 +10,7 @@ def match(command):
 
 
 def get_new_command(command):
-    return ' '.join(command.script_parts[1:])
+    return replace_command_name(command.script, '')
 
 
 # it should be rare enough to actually have to type twice the same word, so

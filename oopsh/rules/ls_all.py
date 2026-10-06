@@ -1,4 +1,4 @@
-from oopsh.utils import for_app
+from oopsh.utils import for_app, replace_command_name
 
 
 @for_app('ls')
@@ -7,4 +7,4 @@ def match(command):
 
 
 def get_new_command(command):
-    return ' '.join(['ls', '-A'] + command.script_parts[1:])
+    return replace_command_name(command.script, 'ls -A')

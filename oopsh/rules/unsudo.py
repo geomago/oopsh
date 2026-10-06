@@ -1,3 +1,5 @@
+from oopsh.utils import replace_command_name
+
 patterns = ['you cannot perform this operation as root']
 
 
@@ -12,4 +14,4 @@ def match(command):
 
 
 def get_new_command(command):
-    return ' '.join(command.script_parts[1:])
+    return replace_command_name(command.script, '')

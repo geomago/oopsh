@@ -15,3 +15,8 @@ def test_match(command):
     (Command('git git push origin/master', ''), 'git push origin/master')])
 def test_get_new_command(command, new_command):
     assert get_new_command(command) == new_command
+
+
+def test_get_new_command_keeps_quotes():
+    assert (get_new_command(Command('git git commit -m "a b"', ''))
+            == 'git commit -m "a b"')

@@ -20,3 +20,8 @@ def test_not_match():
     ('sudo pacaur -S helloworld', 'pacaur -S helloworld')])
 def test_get_new_command(before, after):
     assert get_new_command(Command(before, '')) == after
+
+
+def test_get_new_command_keeps_quotes():
+    assert (get_new_command(Command('sudo npm install -g "my package"', ''))
+            == 'npm install -g "my package"')

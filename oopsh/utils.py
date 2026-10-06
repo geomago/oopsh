@@ -136,6 +136,18 @@ def get_all_executables():
     return bins + aliases
 
 
+def replace_command_name(script, new_name):
+    """Replaces the first word of `script`, keeping the rest of it as typed,
+    quotes included. With an empty `new_name`, just drops the first word.
+
+    Rebuilding the script from `script_parts` would turn
+    `git commit -m "a b"` into `git commit -m a b`.
+
+    """
+    rest = re.sub(r'^\s*\S+\s*', '', script, count=1)
+    return u' '.join(part for part in (new_name, rest) if part)
+
+
 def replace_argument(script, from_, to):
     """Replaces command line argument."""
     replaced_in_the_end = re.sub(u' {}$'.format(re.escape(from_)), u' {}'.format(to),
