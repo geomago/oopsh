@@ -283,6 +283,7 @@ following rules are enabled by default:
 * `git_rm_staged` &ndash;  adds `-f` or `--cached` when you try to `rm` a file with staged changes
 * `git_rebase_merge_dir` &ndash; offers `git rebase (--continue | --abort | --skip)` or removing the `.git/rebase-merge` dir when a rebase is in progress;
 * `git_remote_seturl_add` &ndash; runs `git remote add` when `git remote set_url` on nonexistent remote;
+* `git_safe_directory` &ndash; trusts a repository owned by another user with the `git config --global --add safe.directory` command git suggests;
 * `git_stash` &ndash; stashes your local modifications before rebasing or switching branch;
 * `git_stash_pop` &ndash; adds your local modifications before popping stash, then resets;
 * `git_tag_force` &ndash; adds `--force` to `git tag <tagname>` when the tag already exists;
