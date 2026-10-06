@@ -18,6 +18,18 @@ npm ERR! Please include the following file with any support request:
 npm ERR!     /home/nvbn/exp/code_view/client_web/npm-debug.log
 '''.format
 
+output_npm7 = '''npm ERR! Missing script: "{}"
+npm ERR!
+npm ERR! To see a list of scripts, run:
+npm ERR!   npm run
+'''.format
+
+output_npm10 = '''npm error Missing script: "{}"
+npm error
+npm error To see a list of scripts, run:
+npm error   npm run
+'''.format
+
 run_script_stdout = b'''
 Lifecycle scripts included in code-view-web:
   test
@@ -44,7 +56,9 @@ def run_script(mocker):
 @pytest.mark.parametrize('command', [
     Command('npm ru wach', output('wach')),
     Command('npm run live-tes', output('live-tes')),
-    Command('npm run-script sahare', output('sahare'))])
+    Command('npm run-script sahare', output('sahare')),
+    Command('npm run dvelop', output_npm7('dvelop')),
+    Command('npm run dvelop', output_npm10('dvelop'))])
 def test_match(command):
     assert match(command)
 
@@ -62,7 +76,9 @@ def test_not_match(command):
     ('npm -i run-script dvelop', output('dvelop'),
      'npm -i run-script develop'),
     ('npm -i run-script buld -X POST', output('buld'),
-     'npm -i run-script build -X POST')])
+     'npm -i run-script build -X POST'),
+    ('npm run dvelop', output_npm7('dvelop'), 'npm run develop'),
+    ('npm run wach-tests', output_npm10('wach-tests'), 'npm run watch-test')])
 def test_get_new_command(script, output, result):
     command = Command(script, output)
 
