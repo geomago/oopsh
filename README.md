@@ -386,9 +386,9 @@ The following rules are enabled by default on specific platforms only:
 * `dnf_no_such_command` &ndash; fixes mistyped DNF commands;
 * `docker_daemon_not_running` &ndash; starts the Docker daemon with `systemctl` and runs the command again;
 * `nixos_cmd_not_found` &ndash; installs apps on NixOS;
-* `pacman` &ndash; installs app with `pacman` if it is not installed (uses `yay`, `pikaur` or `yaourt` if available);
+* `pacman` &ndash; installs app with `pacman` if it is not installed (uses `yay`, `pikaur`, `yaourt` or `paru` if available);
 * `pacman_invalid_option` &ndash; replaces lowercase `pacman` options with uppercase.
-* `pacman_not_found` &ndash; fixes package name with `pacman`, `yay`, `pikaur` or `yaourt`.
+* `pacman_not_found` &ndash; fixes package name with `pacman`, `yay`, `pikaur`, `yaourt` or `paru`.
 * `yum_invalid_operation` &ndash; fixes invalid `yum` calls, like `yum isntall vim`;
 
 The following commands are bundled with oopsh, but are not enabled by

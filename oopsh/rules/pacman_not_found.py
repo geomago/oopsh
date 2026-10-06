@@ -12,7 +12,7 @@ from oopsh.specific.sudo import sudo_support
 
 
 @sudo_support
-@for_app('pacman', 'pikaur', 'yaourt', 'yay')
+@for_app('pacman', 'paru', 'pikaur', 'yaourt', 'yay')
 def match(command):
     return 'error: target not found:' in command.output
 
