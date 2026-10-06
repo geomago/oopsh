@@ -34,6 +34,11 @@ def test_not_match(command):
     (Command(u'ךד -ךש', ''), 'ls -la'),
     (Command(u'멧-ㅎㄷㅅ ㅑㅜㄴㅅ미ㅣ 퍄ㅡ', ''), 'apt-get install vim'),
     (Command(u'ㅣㄴ -ㅣㅁ', ''), 'ls -la'),
-    (Command(u'ㅔㅁㅅ촤', ''), 'patchk'), ])
+    (Command(u'ㅔㅁㅅ촤', ''), 'patchk'),
+    # Ukrainian, not Russian, when only the Ukrainian layout has every letter
+    # (nvbn/thefuck#855)
+    (Command(u'пше іе', ''), 'git st'),
+    # Greek (nvbn/thefuck#862)
+    (Command(u'ωιμ', ''), 'vim'), ])
 def test_get_new_command(command, new_command):
     assert switch_lang.get_new_command(command) == new_command
