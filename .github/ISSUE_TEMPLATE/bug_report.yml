@@ -1,0 +1,37 @@
+name: Bug report
+description: oopsh crashes, suggests something wrong, or misses an obvious fix
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: oopsh version
+      description: The output of `oopsh --version`
+      placeholder: oopsh 1.0.0 using Python 3.13.1 and ZSH 5.9
+    validations:
+      required: true
+  - type: input
+    id: system
+    attributes:
+      label: Operating system
+      placeholder: Ubuntu 24.04, macOS 15, Windows 11, ...
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: How to reproduce
+      description: The command you ran, its output, then what `oops` suggested.
+      render: console
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+  - type: textarea
+    id: debug
+    attributes:
+      label: Debug output
+      description: Run `oops --debug` (or `export OOPSH_DEBUG=true`) and paste the output.
+      render: text

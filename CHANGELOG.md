@@ -60,7 +60,30 @@ Other fixes:
 - Debug output no longer dumps the whole environment, which can hold secrets.
 - Windows: commands are also known without their extension (`git.exe` as `git`).
 
+### Security
+
+Fixes for reports filed on thefuck and never addressed there:
+
+- Rules could copy a URL from a command's output into the fix unquoted, letting
+  it run arbitrary commands when the alias evaluated the fix (thefuck#1531).
+- The instant mode session log was readable by other users (thefuck#1621), and
+  oopsh now refuses a log other users can write (thefuck#1622).
+- Third-party rule packages are only loaded from directories other users can't
+  write (thefuck#1623).
+
 ### Fixed
+
+- `fix_file` no longer suggests `vim /bin/sh +1 && ...` for unknown commands
+  (thefuck#1153).
+- `oops` returns the exit status of the fixed command (thefuck#1342).
+- Rules that replace or drop the command name keep the quotes of the rest of the
+  command (thefuck#1543).
+- Closing the terminal during the confirmation no longer leaves oopsh spinning
+  at full CPU (thefuck#806).
+- `git_pull` finds the set-upstream hint anywhere in git's output (thefuck#1406).
+- Arch Linux rules don't fail when `pkgfile` or its database is missing
+  (thefuck#1129).
+- New `git_safe_directory` rule for git's "dubious ownership" error (thefuck#1376).
 
 - Starts and installs on Python 3.12 and later: thefuck used `distutils`, which
   Python 3.12 removed, and `pkg_resources` in `setup.py`.

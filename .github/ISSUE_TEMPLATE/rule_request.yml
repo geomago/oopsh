@@ -1,0 +1,22 @@
+name: Rule request
+description: A mistake oopsh should learn to fix
+labels: [rule request]
+body:
+  - type: textarea
+    id: command
+    attributes:
+      label: The wrong command and its output
+      render: console
+    validations:
+      required: true
+  - type: input
+    id: fixed
+    attributes:
+      label: The command oopsh should suggest
+    validations:
+      required: true
+  - type: input
+    id: tool
+    attributes:
+      label: Tool and version
+      placeholder: git 2.47, apt 2.7, ...

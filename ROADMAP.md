@@ -82,8 +82,11 @@ The first release waits until this milestone is done.
 
 - [x] Triage the 151 open upstream PRs: 40 merged with their original authors, the rest
       documented in [docs/upstream-prs.md](docs/upstream-prs.md)
-- [ ] Triage the ~309 open upstream issues: label them, reproduce the real bugs on oopsh
-- [ ] `CONTRIBUTING.md`, issue/PR templates, labels, code of conduct
+- [x] Triage the 310 open upstream issues ([docs/upstream-issues.md](docs/upstream-issues.md)):
+      fix the real bugs found, including five security reports
+- [ ] Reproduce the ~180 issues marked "to re-check" on oopsh
+- [x] `CONTRIBUTING.md`, `SECURITY.md`, issue forms, PR template, code of conduct
+- [ ] Enable private vulnerability reporting on GitHub; create the `bug` and `rule request` labels
 
 ## Milestone 6: First release (oopsh 1.0)
 
