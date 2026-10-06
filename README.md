@@ -1,25 +1,24 @@
-> **oopsh** is a maintained fork of [thefuck](https://github.com/nvbn/thefuck) by Vladimir Iakovlev, with Python 3.12+ support. It is not an official thefuck release.
-> The rename to oopsh (command: `oops`) is in progress, so the text below still describes thefuck. See [ROADMAP.md](ROADMAP.md).
+# oopsh [![Version][version-badge]][version-link] [![Build Status][workflow-badge]][workflow-link] [![MIT License][license-badge]](LICENSE.md)
 
-# The Fuck [![Version][version-badge]][version-link] [![Build Status][workflow-badge]][workflow-link] [![Coverage][coverage-badge]][coverage-link] [![MIT License][license-badge]](LICENSE.md)
+**oopsh** corrects errors in previous console commands: type `oops` after a
+failed command and it suggests (and runs) the fixed one.
 
-*The Fuck* is a magnificent app, inspired by a [@liamosaur](https://twitter.com/liamosaur/)
-[tweet](https://twitter.com/liamosaur/status/506975850596536320),
-that corrects errors in previous console commands.
+oopsh is a maintained fork of [thefuck](https://github.com/nvbn/thefuck) by
+Vladimir Iakovlev, which is no longer maintained and doesn't run on Python 3.12+.
+It is not an official thefuck release. All of thefuck's rules work in oopsh, and
+the project keeps thefuck's full history and MIT license. See the
+[roadmap](ROADMAP.md) for what's planned.
 
+Is oopsh too slow? [Try the experimental instant mode!](#experimental-instant-mode)
 
-Is *The Fuck* too slow? [Try the experimental instant mode!](#experimental-instant-mode)
-
-[![gif with examples][examples-link]][examples-link]
-
-More examples:
+Examples:
 
 ```bash
 ➜ apt-get install vim
 E: Could not open lock file /var/lib/dpkg/lock - open (13: Permission denied)
 E: Unable to lock the administration directory (/var/lib/dpkg/), are you root?
 
-➜ fuck
+➜ oops
 sudo apt-get install vim [enter/↑/↓/ctrl+c]
 [sudo] password for nvbn:
 Reading package lists... Done
@@ -34,7 +33,7 @@ To push the current branch and set the remote as upstream, use
     git push --set-upstream origin master
 
 
-➜ fuck
+➜ oops
 git push --set-upstream origin master [enter/↑/↓/ctrl+c]
 Counting objects: 9, done.
 ...
@@ -47,7 +46,7 @@ No command 'puthon' found, did you mean:
  Command 'python' from package 'python3' (main)
 zsh: command not found: puthon
 
-➜ fuck
+➜ oops
 python [enter/↑/↓/ctrl+c]
 Python 3.4.2 (default, Oct  8 2014, 13:08:17)
 ...
@@ -60,7 +59,7 @@ git: 'brnch' is not a git command. See 'git --help'.
 Did you mean this?
     branch
 
-➜ fuck
+➜ oops
 git branch [enter/↑/↓/ctrl+c]
 * master
 ```
@@ -72,7 +71,7 @@ git branch [enter/↑/↓/ctrl+c]
 Did you mean this?
          repl
 
-➜ fuck
+➜ oops
 lein repl [enter/↑/↓/ctrl+c]
 nREPL server started on port 54848 on host 127.0.0.1 - nrepl://127.0.0.1:54848
 REPL-y 0.3.1
@@ -87,7 +86,7 @@ If you're not afraid of blindly running corrected commands, the
 E: Could not open lock file /var/lib/dpkg/lock - open (13: Permission denied)
 E: Unable to lock the administration directory (/var/lib/dpkg/), are you root?
 
-➜ fuck
+➜ oops
 sudo apt-get install vim
 [sudo] password for nvbn:
 Reading package lists... Done
@@ -97,108 +96,107 @@ Reading package lists... Done
 ## Contents
 
 1. [Requirements](#requirements)
-2. [Installations](#installation)
-3. [Updating](#updating)
-4. [How it works](#how-it-works)
-5. [Creating your own rules](#creating-your-own-rules)
-6. [Settings](#settings)
-7. [Third party packages with rules](#third-party-packages-with-rules)
-8. [Experimental instant mode](#experimental-instant-mode)
-9. [Developing](#developing)
-10. [License](#license-mit)
+2. [Installation](#installation)
+3. [Coming from thefuck](#coming-from-thefuck)
+4. [Updating](#updating)
+5. [How it works](#how-it-works)
+6. [Creating your own rules](#creating-your-own-rules)
+7. [Settings](#settings)
+8. [Third party packages with rules](#third-party-packages-with-rules)
+9. [Experimental instant mode](#experimental-instant-mode)
+10. [Developing](#developing)
+11. [License](#license-mit)
 
 ## Requirements
 
-- python (3.5+)
-- pip
-- python-dev
+- Python 3.10+
+- Linux, macOS or Windows; Bash, Zsh, Fish, PowerShell or tcsh
 
 ##### [Back to Contents](#contents)
 
 ## Installation
 
-On macOS or Linux, you can install *The Fuck* via [Homebrew][homebrew]:
+oopsh is not on PyPI yet. Until the first release, install it from GitHub
+with [pipx](https://pipx.pypa.io/) or [uv](https://docs.astral.sh/uv/):
 
 ```bash
-brew install thefuck
+pipx install git+https://github.com/geomago/oopsh
+# or
+uv tool install git+https://github.com/geomago/oopsh
 ```
-
-On Ubuntu / Mint, install *The Fuck* with the following commands:
-```bash
-sudo apt update
-sudo apt install python3-dev python3-pip python3-setuptools
-pip3 install thefuck --user
-```
-
-On FreeBSD, install *The Fuck* with the following commands:
-```bash
-pkg install thefuck
-```
-
-On ChromeOS, install *The Fuck* using [chromebrew](https://github.com/skycocker/chromebrew) with the following command:
-```bash
-crew install thefuck
-```
-
-On Arch based systems, install *The Fuck* with the following command:
-```
-sudo pacman -S thefuck
-```
-
-On other systems, install *The Fuck*  by using `pip`:
-
-```bash
-pip install thefuck
-```
-
-[Alternatively, you may use an OS package manager (OS X, Ubuntu, Arch).](https://github.com/nvbn/thefuck/wiki/Installation)
 
 <a href='#manual-installation' name='manual-installation'>#</a>
-It is recommended that you place this command in your `.bash_profile`,
-`.bashrc`, `.zshrc` or other startup script:
+Then add this line to your `.bashrc`, `.zshrc` or other startup script:
 
 ```bash
-eval $(thefuck --alias)
-# You can use whatever you want as an alias, like for Mondays:
-eval $(thefuck --alias FUCK)
+eval "$(oopsh --alias)"
+# You can use whatever you want as an alias:
+eval "$(oopsh --alias argh)"
 ```
 
-[Or in your shell config (Bash, Zsh, Fish, Powershell, tcsh).](https://github.com/nvbn/thefuck/wiki/Shell-aliases)
+For other shells:
+
+| Shell      | Config file      | Line to add                  |
+|------------|------------------|------------------------------|
+| Fish       | `~/.config/fish/config.fish` | `oopsh --alias \| source` |
+| PowerShell | `$PROFILE`       | `iex "$(oopsh --alias)"`     |
+| tcsh       | `~/.tcshrc`      | ``eval `oopsh --alias` ``    |
 
 Changes are only available in a new shell session. To make changes immediately
 available, run `source ~/.bashrc` (or your shell config file like `.zshrc`).
 
+If you just type `oops` before configuring anything, oopsh tells you which line
+to add, and adds it for you if you run `oops` a second time.
+
+The alias defines two shell functions: `oops` and `oopsh`, which do the same
+thing. `oopsh` also stays the name of the program, so `oopsh --version`,
+`oopsh --help` and `oopsh --alias` keep working. (In tcsh only `oops` is defined.)
+
 To run fixed commands without confirmation, use the `--yeah` option (or just `-y` for short, or `--hard` if you're especially frustrated):
 
 ```bash
-fuck --yeah
+oops --yeah
 ```
 
 To fix commands recursively until succeeding, use the `-r` option:
 
 ```bash
-fuck -r
+oops -r
 ```
+
+##### [Back to Contents](#contents)
+
+## Coming from thefuck
+
+oopsh is a drop-in replacement. Until automatic migration is in place
+(see the [roadmap](ROADMAP.md#milestone-3-painless-migration-from-thefuck)):
+
+1. In your shell config, replace `eval $(thefuck --alias)` with `eval "$(oopsh --alias)"`.
+   You now type `oops` instead of `fuck`; to keep the old word, use `eval "$(oopsh --alias fuck)"`.
+2. Move your settings and custom rules from `~/.config/thefuck/` to `~/.config/oopsh/`,
+   and in custom rules change imports like `from thefuck.utils import ...` to `from oopsh.utils import ...`.
+3. Rename any `OOPSH_*` environment variables to `OOPSH_*`.
+4. Uninstall thefuck: `pip uninstall thefuck`.
 
 ##### [Back to Contents](#contents)
 
 ## Updating
 
 ```bash
-pip3 install thefuck --upgrade
+pipx upgrade oopsh
+# or
+uv tool upgrade oopsh
 ```
-
-**Note: Alias functionality was changed in v1.34 of *The Fuck***
 
 ## Uninstall
 
-To remove *The Fuck*, reverse the installation process:
-- erase or comment *thefuck* alias line from your Bash, Zsh, Fish, Powershell, tcsh, ... shell config
-- use your package manager (brew, pip3, pkg, crew, pip) to uninstall the binaries
+To remove oopsh, reverse the installation process:
+- erase or comment the `oopsh --alias` line from your Bash, Zsh, Fish, PowerShell, tcsh, ... shell config
+- uninstall the package: `pipx uninstall oopsh` (or `uv tool uninstall oopsh`)
 
 ## How it works
 
-*The Fuck* attempts to match the previous command with a rule. If a match is
+oopsh attempts to match the previous command with a rule. If a match is
 found, a new command is created using the matched rule and executed. The
 following rules are enabled by default:
 
@@ -375,7 +373,7 @@ The following rules are enabled by default on specific platforms only:
 * `pacman_not_found` &ndash; fixes package name with `pacman`, `yay`, `pikaur` or `yaourt`.
 * `yum_invalid_operation` &ndash; fixes invalid `yum` calls, like `yum isntall vim`;
 
-The following commands are bundled with *The Fuck*, but are not enabled by
+The following commands are bundled with oopsh, but are not enabled by
 default:
 
 * `git_push_force` &ndash; adds `--force-with-lease` to a `git push` (may conflict with `git_push_pull`);
@@ -386,7 +384,7 @@ default:
 ## Creating your own rules
 
 To add your own rule, create a file named `your-rule-name.py`
-in `~/.config/thefuck/rules`. The rule file must contain two functions:
+in `~/.config/oopsh/rules`. The rule file must contain two functions:
 
 ```python
 match(command: Command) -> bool
@@ -405,9 +403,9 @@ Your rule should not change `Command`.
 
 
 **Rules api changed in 3.0:** To access a rule's settings, import it with
- `from thefuck.conf import settings`
+ `from oopsh.conf import settings`
 
-`settings` is a special object assembled from `~/.config/thefuck/settings.py`,
+`settings` is a special object assembled from `~/.config/oopsh/settings.py`,
 and values from env ([see more below](#settings)).
 
 A simple example rule for running a script with `sudo`:
@@ -432,18 +430,18 @@ priority = 1000  # Lower first, default is 1000
 requires_output = True
 ```
 
-[More examples of rules](https://github.com/nvbn/thefuck/tree/master/thefuck/rules),
-[utility functions for rules](https://github.com/nvbn/thefuck/tree/master/thefuck/utils.py),
-[app/os-specific helpers](https://github.com/nvbn/thefuck/tree/master/thefuck/specific/).
+[More examples of rules](https://github.com/geomago/oopsh/tree/main/oopsh/rules),
+[utility functions for rules](https://github.com/geomago/oopsh/tree/main/oopsh/utils.py),
+[app/os-specific helpers](https://github.com/geomago/oopsh/tree/main/oopsh/specific/).
 
 ##### [Back to Contents](#contents)
 
 ## Settings
 
-Several *The Fuck* parameters can be changed in the file `$XDG_CONFIG_HOME/thefuck/settings.py`
+Several oopsh parameters can be changed in the file `$XDG_CONFIG_HOME/oopsh/settings.py`
 (`$XDG_CONFIG_HOME` defaults to `~/.config`):
 
-* `rules` &ndash; list of enabled rules, by default `thefuck.const.DEFAULT_RULES`;
+* `rules` &ndash; list of enabled rules, by default `oopsh.const.DEFAULT_RULES`;
 * `exclude_rules` &ndash; list of disabled rules, by default `[]`;
 * `require_confirmation` &ndash; requires confirmation before running new command, by default `True`;
 * `wait_command` &ndash; the max amount of time in seconds for getting previous command output;
@@ -475,32 +473,32 @@ num_close_matches = 5
 
 Or via environment variables:
 
-* `THEFUCK_RULES` &ndash; list of enabled rules, like `DEFAULT_RULES:rm_root` or `sudo:no_command`;
-* `THEFUCK_EXCLUDE_RULES` &ndash; list of disabled rules, like `git_pull:git_push`;
-* `THEFUCK_REQUIRE_CONFIRMATION` &ndash; require confirmation before running new command, `true/false`;
-* `THEFUCK_WAIT_COMMAND` &ndash; the max amount of time in seconds for getting previous command output;
-* `THEFUCK_NO_COLORS` &ndash; disable colored output, `true/false`;
-* `THEFUCK_PRIORITY` &ndash; priority of the rules, like `no_command=9999:apt_get=100`,
+* `OOPSH_RULES` &ndash; list of enabled rules, like `DEFAULT_RULES:rm_root` or `sudo:no_command`;
+* `OOPSH_EXCLUDE_RULES` &ndash; list of disabled rules, like `git_pull:git_push`;
+* `OOPSH_REQUIRE_CONFIRMATION` &ndash; require confirmation before running new command, `true/false`;
+* `OOPSH_WAIT_COMMAND` &ndash; the max amount of time in seconds for getting previous command output;
+* `OOPSH_NO_COLORS` &ndash; disable colored output, `true/false`;
+* `OOPSH_PRIORITY` &ndash; priority of the rules, like `no_command=9999:apt_get=100`,
 rule with lower `priority` will be matched first;
-* `THEFUCK_DEBUG` &ndash; enables debug output, `true/false`;
-* `THEFUCK_HISTORY_LIMIT` &ndash; how many history commands will be scanned, like `2000`;
-* `THEFUCK_ALTER_HISTORY` &ndash; push fixed command to history `true/false`;
-* `THEFUCK_WAIT_SLOW_COMMAND` &ndash; the max amount of time in seconds for getting previous command output if it in `slow_commands` list;
-* `THEFUCK_SLOW_COMMANDS` &ndash; list of slow commands, like `lein:gradle`;
-* `THEFUCK_NUM_CLOSE_MATCHES` &ndash; the maximum number of close matches to suggest, like `5`.
-* `THEFUCK_EXCLUDED_SEARCH_PATH_PREFIXES` &ndash; path prefixes to ignore when searching for commands, by default `[]`.
+* `OOPSH_DEBUG` &ndash; enables debug output, `true/false`;
+* `OOPSH_HISTORY_LIMIT` &ndash; how many history commands will be scanned, like `2000`;
+* `OOPSH_ALTER_HISTORY` &ndash; push fixed command to history `true/false`;
+* `OOPSH_WAIT_SLOW_COMMAND` &ndash; the max amount of time in seconds for getting previous command output if it in `slow_commands` list;
+* `OOPSH_SLOW_COMMANDS` &ndash; list of slow commands, like `lein:gradle`;
+* `OOPSH_NUM_CLOSE_MATCHES` &ndash; the maximum number of close matches to suggest, like `5`.
+* `OOPSH_EXCLUDED_SEARCH_PATH_PREFIXES` &ndash; path prefixes to ignore when searching for commands, by default `[]`.
 
 For example:
 
 ```bash
-export THEFUCK_RULES='sudo:no_command'
-export THEFUCK_EXCLUDE_RULES='git_pull:git_push'
-export THEFUCK_REQUIRE_CONFIRMATION='true'
-export THEFUCK_WAIT_COMMAND=10
-export THEFUCK_NO_COLORS='false'
-export THEFUCK_PRIORITY='no_command=9999:apt_get=100'
-export THEFUCK_HISTORY_LIMIT='2000'
-export THEFUCK_NUM_CLOSE_MATCHES='5'
+export OOPSH_RULES='sudo:no_command'
+export OOPSH_EXCLUDE_RULES='git_pull:git_push'
+export OOPSH_REQUIRE_CONFIRMATION='true'
+export OOPSH_WAIT_COMMAND=10
+export OOPSH_NO_COLORS='false'
+export OOPSH_PRIORITY='no_command=9999:apt_get=100'
+export OOPSH_HISTORY_LIMIT='2000'
+export OOPSH_NUM_CLOSE_MATCHES='5'
 ```
 
 ##### [Back to Contents](#contents)
@@ -522,19 +520,17 @@ thefuck_contrib_foo
   setup.py
 ```
 
-*The Fuck* will find rules located in the `rules` module.
+oopsh will find rules located in the `rules` module.
 
 ##### [Back to Contents](#contents)
 
 ## Experimental instant mode
 
-The default behavior of *The Fuck* requires time to re-run previous commands.
-When in instant mode, *The Fuck* saves time by logging output with [script](https://en.wikipedia.org/wiki/Script_(Unix)),
+The default behavior of oopsh requires time to re-run previous commands.
+When in instant mode, oopsh saves time by logging output with [script](https://en.wikipedia.org/wiki/Script_(Unix)),
 then reading the log.
 
-[![gif with instant mode][instant-mode-gif-link]][instant-mode-gif-link]
-
-Currently, instant mode only supports Python 3 with bash or zsh. zsh's autocorrect function also needs to be disabled in order for thefuck to work properly.
+Currently, instant mode only supports bash or zsh. zsh's autocorrect function also needs to be disabled in order for oopsh to work properly.
 
 To enable instant mode, add `--enable-experimental-instant-mode`
 to the alias initialization in `.bashrc`, `.bash_profile` or `.zshrc`.
@@ -542,7 +538,7 @@ to the alias initialization in `.bashrc`, `.bash_profile` or `.zshrc`.
 For example:
 
 ```bash
-eval $(thefuck --alias --enable-experimental-instant-mode)
+eval "$(oopsh --alias --enable-experimental-instant-mode)"
 ```
 
 ##### [Back to Contents](#contents)
@@ -552,18 +548,19 @@ eval $(thefuck --alias --enable-experimental-instant-mode)
 See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## License MIT
+
 Project License can be found [here](LICENSE.md).
 
+oopsh is based on [thefuck](https://github.com/nvbn/thefuck) by Vladimir Iakovlev
+and its many contributors, originally inspired by a
+[@liamosaur](https://twitter.com/liamosaur/)
+[tweet](https://twitter.com/liamosaur/status/506975850596536320).
 
-[version-badge]:   https://img.shields.io/pypi/v/thefuck.svg?label=version
-[version-link]:    https://pypi.python.org/pypi/thefuck/
-[workflow-badge]:  https://github.com/nvbn/thefuck/workflows/Tests/badge.svg
-[workflow-link]:   https://github.com/nvbn/thefuck/actions?query=workflow%3ATests
-[coverage-badge]:  https://img.shields.io/coveralls/nvbn/thefuck.svg
-[coverage-link]:   https://coveralls.io/github/nvbn/thefuck
+
+[version-badge]:   https://img.shields.io/pypi/v/oopsh.svg?label=version
+[version-link]:    https://pypi.org/project/oopsh/
+[workflow-badge]:  https://github.com/geomago/oopsh/actions/workflows/test.yml/badge.svg
+[workflow-link]:   https://github.com/geomago/oopsh/actions/workflows/test.yml
 [license-badge]:   https://img.shields.io/badge/license-MIT-007EC7.svg
-[examples-link]:   https://raw.githubusercontent.com/nvbn/thefuck/master/example.gif
-[instant-mode-gif-link]:   https://raw.githubusercontent.com/nvbn/thefuck/master/example_instant_mode.gif
-[homebrew]:        https://brew.sh/
 
 ##### [Back to Contents](#contents)
