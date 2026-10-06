@@ -68,7 +68,7 @@ class TestBash(object):
 
     def test_executable_alias_has_no_glob_characters(self, shell):
         alias = shell._executable_alias('oops')
-        assert '*' not in alias.replace('${1%%=*}', '')
+        assert '*' not in alias.replace('${TF_FIRST%%=*}', '')
         assert '?' not in alias and '[' not in alias.replace('[ ', '')
 
     @pytest.mark.skipif(shutil.which('bash') is None or sys.platform == 'win32',

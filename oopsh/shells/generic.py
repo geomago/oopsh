@@ -52,9 +52,9 @@ class Generic(object):
             return ''
         return '''
             {executable} () {{
-                local TF_ARG;
+                local TF_ARG TF_FIRST="${{1:-}}";
                 for TF_ARG in {arguments}; do
-                    if [ "$1" = "$TF_ARG" ] || [ "${{1%%=*}}" = "$TF_ARG" ]; then
+                    if [ "$TF_FIRST" = "$TF_ARG" ] || [ "${{TF_FIRST%%=*}}" = "$TF_ARG" ]; then
                         command {executable} "$@";
                         return;
                     fi;
