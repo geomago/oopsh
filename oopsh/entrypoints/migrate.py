@@ -58,7 +58,7 @@ def _migrate_config():
         len(copied), _bold(source), _bold(destination)))
     for relative in skipped:
         print(u'  Skipped {}: it already exists in {}.'.format(
-            relative, destination))
+            relative.as_posix(), destination))
     print(u'Custom rules importing from {} keep working as they are.'.format(
         _bold('thefuck')))
     print(u'You can delete {} once oopsh works for you.'.format(source))

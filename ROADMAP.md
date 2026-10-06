@@ -67,27 +67,32 @@ The command layout:
 - [x] Migration guide in the docs (README, "Coming from thefuck")
 - [x] Tests covering all of the above
 
-## Milestone 4: First release (oopsh 1.0)
+## Milestone 4: Release preparation ✅
 
 - [x] Choose the version scheme: semantic versioning from 1.0.0, independent of thefuck 3.x
 - [x] `CHANGELOG.md` listing the changes since thefuck 3.32
 - [x] Release workflow: pushing a `vX.Y.Z` tag builds, publishes to PyPI with Trusted Publishing
       and creates the GitHub release
-- [ ] Configure the trusted publisher on PyPI, tag `v1.0.0`
-- [ ] Recommended install methods in the README: `pipx install oopsh` / `uv tool install oopsh`
-- [ ] Write to the thefuck maintainer, offering to help maintain thefuck itself. No new upstream PR:
-      at least 8 open PRs already carry the same `distutils` fix (#1247, #1404, #1534, #1619, …)
 - [x] PyPI and GitHub metadata people actually search for: description and topics with
       "thefuck alternative", "maintained fork", "Python 3.12"
 
 ## Milestone 5: Upstream backlog
+
+The first release waits until this milestone is done.
 
 - [ ] Triage the ~148 open upstream PRs: merge the useful ones by cherry-picking them
       with their original authors (many are new rules)
 - [ ] Triage the ~309 open upstream issues: label them, reproduce the real bugs on oopsh
 - [ ] `CONTRIBUTING.md`, issue/PR templates, labels, code of conduct
 
-## Milestone 6: Distribution
+## Milestone 6: First release (oopsh 1.0)
+
+- [ ] Configure the trusted publisher on PyPI, tag `v1.0.0`
+- [ ] Recommended install methods in the README: `pipx install oopsh` / `uv tool install oopsh`
+- [ ] Write to the thefuck maintainer, offering to help maintain thefuck itself. No new upstream PR:
+      at least 8 open PRs already carry the same `distutils` fix (#1247, #1404, #1534, #1619, …)
+
+## Milestone 7: Distribution
 
 - [ ] Homebrew: own tap (`geomago/tap`) first, homebrew-core later
 - [ ] AUR, nixpkgs, Debian/Ubuntu
@@ -96,7 +101,7 @@ The command layout:
 - [ ] Windows: Scoop / winget
 - [ ] Decide what to do with the `snapcraft.yaml` and `install.sh` inherited from upstream (still say thefuck)
 
-## Milestone 7: Launch
+## Milestone 8: Launch
 
 Once 1.0 is out, be findable where thefuck users look for a replacement. Every step once, no spam.
 
