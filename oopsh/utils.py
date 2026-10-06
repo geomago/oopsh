@@ -122,10 +122,11 @@ def get_all_executables():
             for exe in _safe(lambda: list(Path(path).iterdir()), [])
             if not _safe(exe.is_dir, True)]
     if sys.platform == 'win32':
-        # `git.exe` is run as `git`
+        # `git.exe` is run as `git`, and `PING.EXE` as `ping`: Windows
+        # ignores case
         extensions = os.environ.get('PATHEXT', '.COM;.EXE;.BAT;.CMD') \
             .lower().split(';')
-        bins += [os.path.splitext(name)[0] for name in bins
+        bins += [os.path.splitext(name)[0].lower() for name in bins
                  if os.path.splitext(name)[1].lower() in extensions]
         tf_entry_points += [name + '.exe' for name in tf_entry_points]
     bins = [name for name in bins if name not in tf_entry_points]

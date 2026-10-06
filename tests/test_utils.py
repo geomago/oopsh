@@ -78,14 +78,15 @@ def test_get_all_executables():
 
 @pytest.mark.usefixtures('no_memoize')
 @pytest.mark.parametrize('platform, expected', [
-    ('win32', {'git.exe', 'git', 'make.cmd', 'make', 'notes.txt', 'vim'}),
-    ('linux', {'git.exe', 'make.cmd', 'notes.txt', 'vim', 'oops.exe'})])
+    ('win32', {'git.exe', 'git', 'make.cmd', 'make', 'notes.txt', 'vim',
+               'PING.EXE', 'ping'}),
+    ('linux', {'git.exe', 'make.cmd', 'notes.txt', 'vim', 'oops.exe', 'PING.EXE'})])
 def test_get_all_executables_windows_extensions(mocker, os_environ, platform, expected):
     os_environ['PATH'] = 'bin'
     mocker.patch('sys.platform', platform)
     mocker.patch('oopsh.shells.shell.get_aliases', return_value=[])
     exes = []
-    for name in ['git.exe', 'make.cmd', 'notes.txt', 'vim', 'oops.exe', 'oopsh']:
+    for name in ['git.exe', 'make.cmd', 'notes.txt', 'vim', 'oops.exe', 'oopsh', 'PING.EXE']:
         exe = mocker.Mock(is_dir=lambda: False)
         exe.name = name
         exes.append(exe)
