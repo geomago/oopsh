@@ -6,15 +6,15 @@ should be:
     yay -S llvm
 """
 
-from oopsh.utils import replace_command
+from oopsh.utils import for_app, replace_command
 from oopsh.specific.archlinux import get_pkgfile, archlinux_env
+from oopsh.specific.sudo import sudo_support
 
 
+@sudo_support
+@for_app('pacman', 'pikaur', 'yaourt', 'yay')
 def match(command):
-    return (command.script_parts
-            and (command.script_parts[0] in ('pacman', 'yay', 'pikaur', 'yaourt')
-                 or command.script_parts[0:2] == ['sudo', 'pacman'])
-            and 'error: target not found:' in command.output)
+    return 'error: target not found:' in command.output
 
 
 def get_new_command(command):
