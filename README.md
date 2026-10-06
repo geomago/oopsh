@@ -225,6 +225,7 @@ following rules are enabled by default:
 * `chmod_x` &ndash; adds execution bit;
 * `choco_install` &ndash; appends common suffixes for chocolatey packages;
 * `composer_not_command` &ndash; fixes composer command name;
+* `composer_not_package` &ndash; fixes misspelled package names for `composer require`, using composer's suggestions;
 * `conda_mistype` &ndash; fixes conda commands;
 * `cp_create_destination` &ndash; creates a new directory when you attempt to `cp` or `mv` to a non-existent one
 * `cp_omitting_directory` &ndash; adds `-a` when you `cp` directory;
