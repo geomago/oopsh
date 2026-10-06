@@ -221,6 +221,7 @@ following rules are enabled by default:
 * `cd_cs` &ndash; changes `cs` to `cd`;
 * `cd_mkdir` &ndash; creates directories before cd'ing into them;
 * `cd_parent` &ndash; changes `cd..` to `cd ..`;
+* `cd_quotes` &ndash; quotes directories with spaces, like `cd My Documents`;
 * `chmod_x` &ndash; adds execution bit;
 * `choco_install` &ndash; appends common suffixes for chocolatey packages;
 * `composer_not_command` &ndash; fixes composer command name;
