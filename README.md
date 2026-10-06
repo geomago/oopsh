@@ -1,3 +1,6 @@
+> **oopsh** is a maintained fork of [thefuck](https://github.com/nvbn/thefuck) by Vladimir Iakovlev, with Python 3.12+ support. It is not an official thefuck release.
+> The rename to oopsh (command: `oops`) is in progress, so the text below still describes thefuck. See [ROADMAP.md](ROADMAP.md).
+
 # The Fuck [![Version][version-badge]][version-link] [![Build Status][workflow-badge]][workflow-link] [![Coverage][coverage-badge]][coverage-link] [![MIT License][license-badge]](LICENSE.md)
 
 *The Fuck* is a magnificent app, inspired by a [@liamosaur](https://twitter.com/liamosaur/)
