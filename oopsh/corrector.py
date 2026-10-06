@@ -1,3 +1,4 @@
+import os
 import sys
 from .conf import settings
 from .types import Rule
@@ -19,6 +20,22 @@ def get_loaded_rules(rules_paths):
                 yield rule
 
 
+def _is_trusted_dir(path):
+    """Third-party rules run as soon as they're found: only take them from
+    directories owned by the user or root and not writable by others, so
+    another user of a shared machine can't plant some (nvbn/thefuck#1623)."""
+    if not hasattr(os, 'getuid'):
+        return True
+    for directory in (path, path.parent):
+        try:
+            stat = directory.stat()
+        except OSError:
+            return False
+        if stat.st_uid not in (0, os.getuid()) or stat.st_mode & 0o022:
+            return False
+    return True
+
+
 def get_rules_import_paths():
     """Yields all rules import paths.
 
@@ -34,8 +51,13 @@ def get_rules_import_paths():
         for pattern in ('oopsh_contrib_*', 'thefuck_contrib_*'):
             for contrib_module in Path(path).glob(pattern):
                 contrib_rules = contrib_module.joinpath('rules')
-                if contrib_rules.is_dir():
+                if not contrib_rules.is_dir():
+                    continue
+                if _is_trusted_dir(contrib_rules):
                     yield contrib_rules
+                else:
+                    logs.warn(u'Ignoring rules in {}: other users can write '
+                              u'there'.format(contrib_rules))
 
 
 def get_rules():

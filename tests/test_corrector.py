@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 import pytest
 from tests.utils import Rule, CorrectedCommand
 from oopsh import corrector, const
@@ -71,3 +72,24 @@ def test_organize_commands():
         == [CorrectedCommand('ls'), CorrectedCommand('ls -lh', priority=100),
             CorrectedCommand(u'echo café', priority=200),
             CorrectedCommand('ls -la', priority=9000)]
+
+
+@pytest.mark.skipif(not hasattr(os, 'getuid'), reason='unix permissions')
+@pytest.mark.parametrize('package_mode, rules_mode, trusted', [
+    (0o755, 0o755, True),
+    (0o775, 0o755, False),
+    (0o755, 0o777, False)])
+def test_contrib_rules_only_from_trusted_dirs(tmp_path, monkeypatch, settings,
+                                              package_mode, rules_mode, trusted):
+    """nvbn/thefuck#1623"""
+    settings.user_dir = tmp_path / 'config'
+    rules = tmp_path / 'oopsh_contrib_foo' / 'rules'
+    rules.mkdir(parents=True)
+    rules.parent.chmod(package_mode)
+    rules.chmod(rules_mode)
+    monkeypatch.setattr('sys.path', [str(tmp_path)])
+    try:
+        assert (rules in list(corrector.get_rules_import_paths())) is trusted
+    finally:
+        rules.chmod(0o755)
+        rules.parent.chmod(0o755)
