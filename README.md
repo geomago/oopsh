@@ -394,6 +394,7 @@ The following rules are enabled by default on specific platforms only:
 * `pacman` &ndash; installs app with `pacman` if it is not installed (uses `yay`, `pikaur`, `yaourt` or `paru` if available);
 * `pacman_invalid_option` &ndash; replaces lowercase `pacman` options with uppercase.
 * `pacman_not_found` &ndash; fixes package name with `pacman`, `yay`, `pikaur`, `yaourt` or `paru`.
+* `xcode_license` &ndash; accepts the Xcode license with `sudo xcodebuild -license` and runs the command again;
 * `yum_invalid_operation` &ndash; fixes invalid `yum` calls, like `yum isntall vim`;
 
 The following commands are bundled with oopsh, but are not enabled by
