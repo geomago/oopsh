@@ -39,7 +39,7 @@ def test_win32_open_command_strips_cmd_metacharacters(monkeypatch):
             == 'cmd /c start "" "https://example.com/acalc.exexy"')
 
 
-@pytest.mark.skipif(not hasattr(os, 'fchmod'), reason='unix permissions')
+@pytest.mark.skipif(sys.platform == 'win32', reason='no shell logger on Windows')
 def test_shell_logger_log_is_private(tmp_path, mocker, monkeypatch):
     """nvbn/thefuck#1621"""
     from oopsh.entrypoints import shell_logger
