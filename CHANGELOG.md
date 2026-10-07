@@ -4,18 +4,43 @@ All notable changes to oopsh are listed here. oopsh is a maintained fork of
 [thefuck](https://github.com/nvbn/thefuck); this file starts from thefuck 3.32,
 its last release.
 
-## Unreleased
+## 1.0.1 (2026-10-07)
+
+A security and robustness release, after a review of the whole code base.
+Upgrading is recommended.
 
 ### Security
 
-- Branch names copied from git's output into fixes are now quoted. Git allows
-  characters like `;` and `$(` in branch names, so a crafted branch name could
-  run shell code through `git_push`, `git_pull`,
-  `git_push_different_branch_names` or `git_branch_exists` (the same issue was
+- Only the fix reaches the shell. The alias evaluates whatever oopsh writes to
+  stdout, and the output of a rule's subprocess or side effect could get there
+  too, and run. Now everything else goes to stderr.
+- The `sudo` and `su` rules wrapped commands in `sh -c "..."`, where the user's
+  shell expands `$(...)` and backticks before sudo runs: text the user had
+  single-quoted could run as code, as root. The command is now passed exactly
+  as typed.
+- Branch names copied from git's output are quoted. Git allows `;` and `$(` in
+  branch names, so a crafted name could run code through `git_push`,
+  `git_pull`, `git_push_different_branch_names` or `git_branch_exists` (also
   reported on The Bleep, another thefuck successor).
+- `dirty_untar` and `dirty_unzip` could delete files outside the current
+  directory: an archive entry like `../proj-evil/x` passed their check in
+  `proj`.
+- `ssh_known_hosts` only edits known_hosts files: the remote host can print
+  text that looks like ssh's "Offending key in FILE:LINE".
+- The first-run tracker no longer has a predictable name in the shared temp
+  directory, where another local user could plant a symlink.
+- The cache, which is pickled, is only used from a private directory
+  (`$XDG_CACHE_HOME/oopsh`, created readable by the user only).
+- `fix_file` quotes the file name it takes from the output.
+- Alias names must be plain command names.
 
 ### Fixed
 
+- A rule failing while building its fix no longer crashes oopsh and loses the
+  other rules' suggestions; a failing side effect no longer blocks the fix.
+- The permission checks accept group-writable files when the group is the
+  user's private one (default umask 002 on Debian, Ubuntu, Fedora).
+- The external shell logger reader looks for the command in every logged entry.
 - The source distribution includes the whole test suite.
 
 ## 1.0.0 (2026-10-07)
