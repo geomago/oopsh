@@ -91,7 +91,7 @@ The command layout:
 ## Milestone 6: First release (oopsh 1.0)
 
 - [ ] Configure the trusted publisher on PyPI, tag `v1.0.0`
-- [ ] Recommended install methods in the README: `pipx install oopsh` / `uv tool install oopsh`
+- [x] Recommended install methods in the README: `pipx install oopsh` / `uv tool install oopsh`
 - [ ] Write to the thefuck maintainer, offering to help maintain thefuck itself. No new upstream PR:
       at least 8 open PRs already carry the same `distutils` fix (#1247, #1404, #1534, #1619, …)
 

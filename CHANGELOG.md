@@ -4,7 +4,7 @@ All notable changes to oopsh are listed here. oopsh is a maintained fork of
 [thefuck](https://github.com/nvbn/thefuck); this file starts from thefuck 3.32,
 its last release.
 
-## 1.0.0 (unreleased)
+## 1.0.0 (2026-10-07)
 
 First release of oopsh, based on thefuck 3.32 and the unreleased thefuck commits
 up to January 2024.

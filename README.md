@@ -120,13 +120,14 @@ Reading package lists... Done
 
 ## Installation
 
-oopsh is not on PyPI yet. Until the first release, install it from GitHub
-with [pipx](https://pipx.pypa.io/) or [uv](https://docs.astral.sh/uv/):
+Install oopsh with [pipx](https://pipx.pypa.io/) or [uv](https://docs.astral.sh/uv/),
+which keep it in its own environment (recent Linux distributions don't let
+`pip` install into the system Python):
 
 ```bash
-pipx install git+https://github.com/geomago/oopsh
+pipx install oopsh
 # or
-uv tool install git+https://github.com/geomago/oopsh
+uv tool install oopsh
 ```
 
 <a href='#manual-installation' name='manual-installation'>#</a>

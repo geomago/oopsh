@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "oopsh"
-version = "1.0.0.dev0"
+version = "1.0.0"
 description = "Corrects your previous console command. A maintained fork of thefuck."
 readme = "README.md"
 license = "MIT"
