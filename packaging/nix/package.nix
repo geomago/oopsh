@@ -7,12 +7,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "oopsh";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sX4Zcl0bV1ROP6oGSeJbIiDBH6LrUKHe9CL4IirGaLA=";
+    hash = "sha256-sz60ufsA8Lqw7oEd0DUx9q9MuYkoPc8xobW8pf1uwzU=";
   };
 
   build-system = with python3Packages; [ setuptools ];

@@ -1,6 +1,6 @@
 # Maintainer: Giorgio Di Falco <https://github.com/geomago>
 pkgname=oopsh
-pkgver=1.0.1
+pkgver=1.1.0
 pkgrel=1
 pkgdesc='Corrects your previous console command (maintained fork of thefuck)'
 arch=('any')
@@ -10,7 +10,7 @@ depends=('python' 'python-colorama' 'python-decorator' 'python-psutil' 'python-p
 makedepends=('python-build' 'python-installer' 'python-setuptools' 'python-wheel')
 checkdepends=('python-pytest' 'python-pytest-mock')
 source=("https://files.pythonhosted.org/packages/source/o/oopsh/oopsh-$pkgver.tar.gz")
-sha256sums=('b17e19725d1b57544e3faa0649e25b2220c11fa2eb50a1def422f8222ac668b0')
+sha256sums=('b33eb4b9fb00f0bab0ee811dd03531f6af4cb989283dcf31a1b5bca5fd6ec335')
 
 build() {
   cd "$pkgname-$pkgver"
