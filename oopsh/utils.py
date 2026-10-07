@@ -220,6 +220,21 @@ def for_app(*app_names, **kwargs):
     return decorator(_for_app)
 
 
+def is_inside(path, directory):
+    """Returns `True` when `path` is in `directory`, symlinks resolved.
+
+    A string prefix check isn't enough: `/home/u/proj-evil` starts with
+    `/home/u/proj`.
+
+    """
+    path = os.path.realpath(path)
+    directory = os.path.realpath(directory)
+    try:
+        return os.path.commonpath([path, directory]) == directory
+    except ValueError:  # different drives on Windows
+        return False
+
+
 def get_cache_dir():
     """Returns oopsh's private cache dir, `$XDG_CACHE_HOME/oopsh`, creating
     it readable by the user only."""

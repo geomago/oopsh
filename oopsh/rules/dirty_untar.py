@@ -1,6 +1,6 @@
 import tarfile
 import os
-from oopsh.utils import for_app
+from oopsh.utils import for_app, is_inside
 from oopsh.shells import shell
 
 
@@ -41,7 +41,7 @@ def get_new_command(command):
 def side_effect(old_cmd, command):
     with tarfile.TarFile(_tar_file(old_cmd.script_parts)[0]) as archive:
         for file in archive.getnames():
-            if not os.path.abspath(file).startswith(os.getcwd()):
+            if not is_inside(file, os.getcwd()):
                 # it's unsafe to overwrite files outside of the current directory
                 continue
 

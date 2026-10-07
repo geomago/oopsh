@@ -152,3 +152,54 @@ def test_only_the_fix_reaches_stdout(capfd, mocker, settings):
     assert out == 'echo fixed'
     assert 'printed by a side effect' in err
     assert 'child process' in err
+
+
+def test_is_inside(tmp_path):
+    from oopsh.utils import is_inside
+    (tmp_path / 'proj').mkdir()
+    (tmp_path / 'proj-evil').mkdir()
+    assert is_inside(str(tmp_path / 'proj' / 'a'), str(tmp_path / 'proj'))
+    assert not is_inside(str(tmp_path / 'proj-evil' / 'a'), str(tmp_path / 'proj'))
+    assert not is_inside(str(tmp_path / 'proj' / '..' / 'a'), str(tmp_path / 'proj'))
+
+
+def test_dirty_untar_only_removes_files_in_the_current_dir(tmp_path, monkeypatch):
+    """`../proj-evil/x` resolves outside `proj`, though it starts with it."""
+    import tarfile
+    from oopsh.rules.dirty_untar import side_effect
+    project, sibling = tmp_path / 'proj', tmp_path / 'proj-evil'
+    project.mkdir()
+    sibling.mkdir()
+    (sibling / 'keep').write_text('precious')
+    (project / 'extracted').write_text('from the archive')
+    with tarfile.open(str(project / 'a.tar'), 'w') as archive:
+        for name, path in [('../proj-evil/keep', sibling / 'keep'),
+                           ('extracted', project / 'extracted')]:
+            archive.add(str(path), arcname=name)
+    monkeypatch.chdir(project)
+    side_effect(Command('tar xvf a.tar', ''), None)
+    assert (sibling / 'keep').read_text() == 'precious'
+    assert not (project / 'extracted').exists()
+
+
+def test_ssh_known_hosts_only_edits_known_hosts(tmp_path):
+    from oopsh.rules.ssh_known_hosts import side_effect
+    bashrc = tmp_path / '.bashrc'
+    bashrc.write_text('first line\nsecond line\n')
+    output = ('WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!\n'
+              'Offending ECDSA key in {}:1\n'.format(bashrc))
+    side_effect(Command('ssh host', output), None)
+    assert bashrc.read_text() == 'first line\nsecond line\n'
+
+
+def test_failing_side_effect_still_prints_the_fix(capsys, settings):
+    from oopsh.types import CorrectedCommand
+
+    def side_effect(old_command, script):
+        raise OSError('disk full')
+
+    settings.alter_history = False
+    CorrectedCommand('ls', side_effect, 100).run(Command('sl', ''))
+    out, err = capsys.readouterr()
+    assert out == 'ls'
+    assert 'disk full' in err

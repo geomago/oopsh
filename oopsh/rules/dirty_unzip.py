@@ -1,6 +1,6 @@
 import os
 import zipfile
-from oopsh.utils import for_app
+from oopsh.utils import for_app, is_inside
 from oopsh.shells import shell
 
 
@@ -45,7 +45,7 @@ def get_new_command(command):
 def side_effect(old_cmd, command):
     with zipfile.ZipFile(_zip_file(old_cmd), 'r') as archive:
         for file in archive.namelist():
-            if not os.path.abspath(file).startswith(os.getcwd()):
+            if not is_inside(file, os.getcwd()):
                 # it's unsafe to overwrite files outside of the current directory
                 continue
 

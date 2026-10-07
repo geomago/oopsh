@@ -1,3 +1,4 @@
+import os
 import re
 from oopsh.utils import for_app
 
@@ -30,6 +31,10 @@ def side_effect(old_cmd, command):
         re.MULTILINE)
     offending = offending_pattern.findall(old_cmd.output)
     for filepath, lineno in offending:
+        # The remote host can print text too (banners): only ever edit
+        # known_hosts files
+        if not os.path.basename(filepath).startswith('known_hosts'):
+            continue
         with open(filepath, 'r') as fh:
             lines = fh.readlines()
             del lines[int(lineno) - 1]

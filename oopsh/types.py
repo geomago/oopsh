@@ -262,7 +262,11 @@ class CorrectedCommand(object):
 
         """
         if self.side_effect:
-            self.side_effect(old_cmd, self.script)
+            try:
+                self.side_effect(old_cmd, self.script)
+            except Exception:
+                logs.exception(u'Side effect of {} failed'.format(self.script),
+                               sys.exc_info())
         if settings.alter_history:
             shell.put_to_history(self.script)
         # This depends on correct setting of PYTHONIOENCODING by the alias:
