@@ -86,11 +86,11 @@ The command layout:
       them on oopsh
 - [x] `CONTRIBUTING.md`, `SECURITY.md`, issue forms, PR template, code of conduct
 - [x] Create the `bug` and `rule request` labels
-- [ ] Enable private vulnerability reporting on GitHub
+- [x] Enable private vulnerability reporting on GitHub
 
 ## Milestone 6: First release (oopsh 1.0)
 
-- [ ] Configure the trusted publisher on PyPI, tag `v1.0.0`
+- [x] Configure the trusted publisher on PyPI, tag `v1.0.0`: [oopsh 1.0.0 on PyPI](https://pypi.org/project/oopsh/)
 - [x] Recommended install methods in the README: `pipx install oopsh` / `uv tool install oopsh`
 - [ ] Write to the thefuck maintainer, offering to help maintain thefuck itself. No new upstream PR:
       at least 8 open PRs already carry the same `distutils` fix (#1247, #1404, #1534, #1619, …)
