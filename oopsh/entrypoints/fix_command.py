@@ -1,4 +1,6 @@
+from contextlib import contextmanager
 from pprint import pformat
+import io
 import os
 import sys
 from difflib import SequenceMatcher
@@ -26,10 +28,36 @@ def _get_raw_command(known_args):
     return []
 
 
+@contextmanager
+def _only_the_fix_on_stdout():
+    """The shell alias evaluates whatever oopsh writes to stdout, so nothing
+    but the fix may get there: while rules run, stdout (the file descriptor,
+    which subprocesses inherit, and `sys.stdout`) goes to stderr. Yields a
+    stream on the real stdout, for the fix.
+
+    """
+    sys.stdout.flush()
+    real_stdout_fd = os.dup(1)
+    os.dup2(2, 1)
+    original_stdout = sys.stdout
+    sys.stdout = sys.stderr
+    real_stdout = io.TextIOWrapper(
+        io.FileIO(real_stdout_fd, 'w', closefd=False),
+        encoding=original_stdout.encoding or 'utf-8',
+        errors=getattr(original_stdout, 'errors', None) or 'strict')
+    try:
+        yield real_stdout
+    finally:
+        real_stdout.flush()
+        sys.stdout = original_stdout
+        os.dup2(real_stdout_fd, 1)
+        os.close(real_stdout_fd)
+
+
 def fix_command(known_args):
     """Fixes previous command. Used when `oopsh` called without arguments."""
     settings.init(known_args)
-    with logs.debug_time('Total'):
+    with _only_the_fix_on_stdout() as real_stdout, logs.debug_time('Total'):
         logs.debug(u'Run with settings: {}'.format(pformat(settings)))
         raw_command = _get_raw_command(known_args)
 
@@ -43,6 +71,6 @@ def fix_command(known_args):
         selected_command = select_command(corrected_commands)
 
         if selected_command:
-            selected_command.run(command)
+            selected_command.run(command, out=real_stdout)
         else:
             sys.exit(1)

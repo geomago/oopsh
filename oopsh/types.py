@@ -244,8 +244,9 @@ class CorrectedCommand(object):
         else:
             return self.script
 
-    def run(self, old_cmd):
-        """Runs command from rule for passed command.
+    def run(self, old_cmd, out=None):
+        """Runs command from rule for passed command: writes the fix, which
+        the shell alias evaluates, to `out` (stdout by default).
 
         :type old_cmd: Command
 
@@ -258,4 +259,4 @@ class CorrectedCommand(object):
         logs.debug(u'PYTHONIOENCODING: {}'.format(
             os.environ.get('PYTHONIOENCODING', '!!not-set!!')))
 
-        sys.stdout.write(self._get_script())
+        (out or sys.stdout).write(self._get_script())

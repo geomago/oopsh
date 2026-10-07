@@ -124,3 +124,27 @@ def _unquoted(script, characters):
         elif char in characters and not quoted:
             found.append(char)
     return found
+
+
+def test_only_the_fix_reaches_stdout(capfd, mocker, settings):
+    """The alias evaluates oopsh's stdout: output of rules' subprocesses and
+    side effects must not get there."""
+    import subprocess
+    from unittest.mock import Mock
+    from oopsh.entrypoints import fix_command as fix_command_module
+    from oopsh.types import CorrectedCommand
+
+    def side_effect(old_command, script):
+        print('printed by a side effect')
+        subprocess.call([sys.executable, '-c', 'print("child process")'])
+
+    mocker.patch.object(fix_command_module, 'get_corrected_commands', return_value=[])
+    mocker.patch.object(fix_command_module, 'select_command',
+                        return_value=CorrectedCommand('echo fixed', side_effect, 100))
+    mocker.patch('oopsh.conf.Settings.init')
+    settings.alter_history = False
+    fix_command_module.fix_command(Mock(force_command='ehco fixed', command=[]))
+    out, err = capfd.readouterr()
+    assert out == 'echo fixed'
+    assert 'printed by a side effect' in err
+    assert 'child process' in err
