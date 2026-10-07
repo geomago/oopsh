@@ -111,12 +111,12 @@ The command layout:
 
 Once 1.0 is out, be findable where thefuck users look for a replacement. Every step once, no spam.
 
-- [ ] One helpful comment in each of the main upstream issues (Python 3.12, `distutils`,
-      Ubuntu 24.04, #1566 "is it still maintained?") with the fix and how to install oopsh
-- [ ] Curated lists: awesome-shell, awesome-cli-apps; list oopsh on AlternativeTo as a
-      thefuck alternative
-- [ ] Announce: Show HN, r/commandline, r/Python
-- [ ] Keep the README's first screen about the one-line switch from thefuck
+- [x] One helpful comment in the two upstream issues where people look for a replacement:
+      nvbn/thefuck#1466 "The repo is dead" and #1457 "Cannot install on Ubuntu 24.04"
+- [ ] Show HN
+- [ ] awesome-cli-apps, once oopsh is 3 months old with 20+ stars (their rules)
+- [ ] r/commandline, if the Show HN goes well
+- [x] Keep the README's first screen about the one-line switch from thefuck
 
 ## Later
 
