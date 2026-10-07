@@ -147,6 +147,7 @@ def test_only_the_fix_reaches_stdout(capfd, mocker, settings):
                         env=REAL_ENVIRONMENT)
 
     mocker.patch.object(fix_command_module, 'get_corrected_commands', return_value=[])
+    mocker.patch('oopsh.types.get_output', return_value='ehco: command not found')
     mocker.patch.object(fix_command_module, 'select_command',
                         return_value=CorrectedCommand('echo fixed', side_effect, 100))
     mocker.patch('oopsh.conf.Settings.init')
