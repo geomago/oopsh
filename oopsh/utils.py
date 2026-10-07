@@ -220,6 +220,27 @@ def for_app(*app_names, **kwargs):
     return decorator(_for_app)
 
 
+def get_cache_dir():
+    """Returns oopsh's private cache dir, `$XDG_CACHE_HOME/oopsh`, creating
+    it readable by the user only."""
+    xdg_cache_home = os.getenv('XDG_CACHE_HOME', os.path.expanduser('~/.cache'))
+    cache_dir = os.path.join(xdg_cache_home, 'oopsh')
+    if os.path.isfile(cache_dir):
+        # oopsh 1.0.0 kept its cache in a file with this name
+        os.remove(cache_dir)
+    os.makedirs(cache_dir, mode=0o700, exist_ok=True)
+    return cache_dir
+
+
+def is_private(path):
+    """Returns `True` when `path` belongs to the user and others can't write
+    to it, so they can't plant content oopsh would trust."""
+    if not hasattr(os, 'getuid'):
+        return True
+    stat = os.stat(path)
+    return stat.st_uid == os.getuid() and not stat.st_mode & 0o022
+
+
 class Cache(object):
     """Lazy read cache and save changes at exit."""
 
@@ -234,8 +255,14 @@ class Cache(object):
             self._db = {}
 
     def _setup_db(self):
-        cache_dir = self._get_cache_dir()
-        cache_path = Path(cache_dir).joinpath('oopsh').as_posix()
+        cache_dir = get_cache_dir()
+        # The cache is pickled: loading one someone else wrote runs their code
+        if not is_private(cache_dir):
+            warn("Not using the cache in {}: other users can write there"
+                 .format(cache_dir))
+            self._db = {}
+            return
+        cache_path = Path(cache_dir).joinpath('cache').as_posix()
 
         try:
             self._db = shelve.open(cache_path)
@@ -246,14 +273,6 @@ class Cache(object):
             self._db = shelve.open(cache_path)
 
         atexit.register(self._db.close)
-
-    def _get_cache_dir(self):
-        default_xdg_cache_dir = os.path.expanduser("~/.cache")
-        cache_dir = os.getenv("XDG_CACHE_HOME", default_xdg_cache_dir)
-
-        os.makedirs(cache_dir, exist_ok=True)
-
-        return cache_dir
 
     def _get_mtime(self, path):
         try:

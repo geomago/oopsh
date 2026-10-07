@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 import pytest
 import warnings
 from unittest.mock import Mock, call, patch
@@ -320,3 +321,32 @@ class TestGetValidHistoryWithoutCurrent(object):
     def test_get_valid_history_without_current(self, script, result):
         command = Command(script, '')
         assert get_valid_history_without_current(command) == result
+
+
+class TestCacheDir(object):
+    @pytest.fixture(autouse=True)
+    def cache_home(self, tmp_path, os_environ):
+        os_environ['XDG_CACHE_HOME'] = str(tmp_path)
+        return tmp_path
+
+    def test_created_private(self, cache_home):
+        from oopsh.utils import get_cache_dir
+        assert get_cache_dir() == str(cache_home / 'oopsh')
+        if hasattr(os, 'getuid'):
+            assert (cache_home / 'oopsh').stat().st_mode & 0o077 == 0
+
+    def test_replaces_the_1_0_0_cache_file(self, cache_home):
+        from oopsh.utils import get_cache_dir
+        (cache_home / 'oopsh').write_text('old cache')
+        assert os.path.isdir(get_cache_dir())
+
+    @pytest.mark.skipif(not hasattr(os, 'getuid'), reason='unix permissions')
+    def test_cache_unused_when_others_can_write(self, cache_home, mocker):
+        from oopsh.utils import Cache
+        (cache_home / 'oopsh').mkdir()
+        (cache_home / 'oopsh').chmod(0o777)
+        shelve_open = mocker.patch('oopsh.utils.shelve.open')
+        cache = Cache()
+        cache._setup_db()
+        assert cache._db == {}
+        assert not shelve_open.called

@@ -3,16 +3,15 @@ from ..system import init_output
 
 init_output()
 
-import getpass  # noqa: E402
 import os  # noqa: E402
 import json  # noqa: E402
-from tempfile import gettempdir  # noqa: E402
 import time  # noqa: E402
 from psutil import Process  # noqa: E402
 from .. import logs, const  # noqa: E402
 from ..shells import shell  # noqa: E402
 from ..conf import settings  # noqa: E402
 from ..system import Path  # noqa: E402
+from ..utils import get_cache_dir  # noqa: E402
 
 
 def _get_shell_pid():
@@ -27,9 +26,9 @@ def _get_shell_pid():
 
 def _get_not_configured_usage_tracker_path():
     """Returns path of special file where we store latest shell pid."""
-    return Path(gettempdir()).joinpath(u'oopsh.last_not_configured_run_{}'.format(
-        getpass.getuser(),
-    ))
+    # In the private cache dir: a predictable name in the shared temp dir
+    # could be a symlink planted by another user, that we would write through
+    return Path(get_cache_dir()).joinpath(u'last_not_configured_run')
 
 
 def _record_first_run():
