@@ -52,6 +52,5 @@ def get_output(script):
                 lines = _get_output_lines(command['output'])
                 output = '\n'.join(lines).strip()
                 return output
-            else:
-                logs.warn("Output isn't available in shell logger")
-                return None
+        logs.warn("Output isn't available in shell logger")
+        return None
