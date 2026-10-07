@@ -130,6 +130,12 @@ pipx install oopsh
 uv tool install oopsh
 ```
 
+On macOS and Linux you can also use [Homebrew](https://brew.sh/):
+
+```bash
+brew install geomago/tap/oopsh
+```
+
 <a href='#manual-installation' name='manual-installation'>#</a>
 Then add this line to your `.bashrc`, `.zshrc` or other startup script:
 
@@ -197,13 +203,15 @@ To switch:
 pipx upgrade oopsh
 # or
 uv tool upgrade oopsh
+# or
+brew upgrade oopsh
 ```
 
 ## Uninstall
 
 To remove oopsh, reverse the installation process:
 - erase or comment the `oopsh --alias` line from your Bash, Zsh, Fish, PowerShell, tcsh, ... shell config
-- uninstall the package: `pipx uninstall oopsh` (or `uv tool uninstall oopsh`)
+- uninstall the package: `pipx uninstall oopsh` (or `uv tool uninstall oopsh`, or `brew uninstall oopsh`)
 
 ## How it works
 

@@ -98,12 +98,13 @@ The command layout:
 ## Milestone 7: Distribution
 
 - [x] Recipes for Homebrew, AUR and nixpkgs in [packaging/](packaging/)
-
-- [ ] Homebrew: own tap (`geomago/tap`) first, homebrew-core later
-- [ ] AUR, nixpkgs, Debian/Ubuntu
-- [ ] Where the thefuck package is broken on Python 3.12+ (Homebrew, AUR, nixpkgs, Debian/Ubuntu),
-      report it with a link to the fix; once oopsh has some traction, propose it as a new package
-- [ ] Windows: Scoop / winget
+- [x] Homebrew tap: `brew install geomago/tap/oopsh`
+- [ ] homebrew-core, once oopsh is notable enough (around 75 stars)
+- [ ] AUR, nixpkgs, Debian/Ubuntu: later, or by community packagers using [packaging/](packaging/).
+      Meanwhile `pipx install oopsh` works everywhere
+- [x] ~~Report the broken thefuck packages~~: Homebrew, Arch and Debian already patched thefuck 3.32
+      themselves
+- [ ] Windows: Scoop / winget, once oopsh has some traction
 - [x] Remove the `snapcraft.yaml` and `install.sh` inherited from upstream
 
 ## Milestone 8: Launch
