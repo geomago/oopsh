@@ -97,6 +97,8 @@ The command layout:
 
 ## Milestone 7: Distribution
 
+- [x] Recipes for Homebrew, AUR and nixpkgs in [packaging/](packaging/)
+
 - [ ] Homebrew: own tap (`geomago/tap`) first, homebrew-core later
 - [ ] AUR, nixpkgs, Debian/Ubuntu
 - [ ] Where the thefuck package is broken on Python 3.12+ (Homebrew, AUR, nixpkgs, Debian/Ubuntu),
