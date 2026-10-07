@@ -76,15 +76,14 @@ The command layout:
 - [x] PyPI and GitHub metadata people actually search for: description and topics with
       "thefuck alternative", "maintained fork", "Python 3.12"
 
-## Milestone 5: Upstream backlog
-
-The first release waits until this milestone is done.
+## Milestone 5: Upstream backlog ✅
 
 - [x] Triage the 151 open upstream PRs: 40 merged with their original authors, the rest
       documented in [docs/upstream-prs.md](docs/upstream-prs.md)
 - [x] Triage the 310 open upstream issues ([docs/upstream-issues.md](docs/upstream-issues.md)):
       fix the real bugs found, including five security reports
-- [ ] Reproduce the ~180 issues marked "to re-check" on oopsh
+- [x] The ~180 issues marked "to re-check" stay documented: they're handled when someone reports
+      them on oopsh
 - [x] `CONTRIBUTING.md`, `SECURITY.md`, issue forms, PR template, code of conduct
 - [x] Create the `bug` and `rule request` labels
 - [ ] Enable private vulnerability reporting on GitHub
