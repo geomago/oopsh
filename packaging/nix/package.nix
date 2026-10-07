@@ -7,12 +7,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "oopsh";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d5Qkgz4L46d+kAT5ywbXhgCh3e20FGJVjjUpxinK1dw=";
+    hash = "sha256-sX4Zcl0bV1ROP6oGSeJbIiDBH6LrUKHe9CL4IirGaLA=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -29,9 +29,7 @@ python3Packages.buildPythonApplication rec {
     pytest-mock
   ];
 
-  # The 1.0.0 sdist lacks conftest.py and the tests/ subdirectories; later
-  # releases ship them, and this line can go
-  doCheck = false;
+  disabledTestPaths = [ "tests/functional" ];
 
   pythonImportsCheck = [ "oopsh" ];
 

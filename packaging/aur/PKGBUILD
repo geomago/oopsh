@@ -1,6 +1,6 @@
 # Maintainer: Giorgio Di Falco <https://github.com/geomago>
 pkgname=oopsh
-pkgver=1.0.0
+pkgver=1.0.1
 pkgrel=1
 pkgdesc='Corrects your previous console command (maintained fork of thefuck)'
 arch=('any')
@@ -9,9 +9,8 @@ license=('MIT')
 depends=('python' 'python-colorama' 'python-decorator' 'python-psutil' 'python-pyte')
 makedepends=('python-build' 'python-installer' 'python-setuptools' 'python-wheel')
 checkdepends=('python-pytest' 'python-pytest-mock')
-# The GitHub archive, unlike the 1.0.0 sdist, has the whole test suite
-source=("$pkgname-$pkgver.tar.gz::https://github.com/geomago/oopsh/archive/refs/tags/v$pkgver.tar.gz")
-sha256sums=('a3df3c993b26b26c854ec551beb7a6ff6e2d127d974bd46a587b6b10dd23e8be')
+source=("https://files.pythonhosted.org/packages/source/o/oopsh/oopsh-$pkgver.tar.gz")
+sha256sums=('b17e19725d1b57544e3faa0649e25b2220c11fa2eb50a1def422f8222ac668b0')
 
 build() {
   cd "$pkgname-$pkgver"
