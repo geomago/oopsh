@@ -10,8 +10,8 @@ oopsh reviewed every pull request that was open on [nvbn/thefuck](https://github
 | superseded | 2 |
 | already in oopsh | 56 |
 | docs obsolete | 9 |
-| deferred | 9 |
-| not merged | 37 |
+| deferred | 8 |
+| not merged | 38 |
 
 | PR | Title | Author | Decision | Notes |
 |---|---|---|---|---|
@@ -126,7 +126,7 @@ oopsh reviewed every pull request that was open on [nvbn/thefuck](https://github
 | [#1114](https://github.com/nvbn/thefuck/pull/1114) | * Pamac: Correct invalid operation | @earboxer | deferred | no tests |
 | [#1363](https://github.com/nvbn/thefuck/pull/1363) | Add ChatGPT as a rule, disabled by default. | @XieGuochao | deferred | sends commands to an external API; maybe as an opt-in plugin |
 | [#1365](https://github.com/nvbn/thefuck/pull/1365) | GPT-3.5 | @pannous | deferred | same as #1363 |
-| [#1442](https://github.com/nvbn/thefuck/pull/1442) | Add nushell support | @afresquet | deferred | runs the fix in a subprocess, so `cd` has no effect; nushell support is planned |
+| [#1442](https://github.com/nvbn/thefuck/pull/1442) | Add nushell support | @afresquet | not merged | nushell support was written separately on the same idea; the alias also follows the fix's `cd` |
 | [#1506](https://github.com/nvbn/thefuck/pull/1506) | Add Escape key as an alternative way to abort selection | @Nau-stack-110 | deferred | would break arrow keys on Unix; needs a proper Esc implementation |
 | [#1538](https://github.com/nvbn/thefuck/pull/1538) | #1536: Added --shell argument to force specific shell usage. | @gojodennis | deferred | `TF_SHELL=fish` already does it |
 | [#734](https://github.com/nvbn/thefuck/pull/734) | Add special error message for 'shit' alias | @natesholland | not merged | joke |

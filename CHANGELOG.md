@@ -4,6 +4,16 @@ All notable changes to oopsh are listed here. oopsh is a maintained fork of
 [thefuck](https://github.com/nvbn/thefuck); this file starts from thefuck 3.32,
 its last release.
 
+## Unreleased
+
+### Added
+
+- Nushell support (nvbn/thefuck#1441, #1254): `oops` and `oopsh` as nushell
+  commands, with nushell aliases and history. Nushell has no `eval`, so the fix
+  runs in a subprocess, and the alias follows it when it changes directory
+  (`mkdir -p foo && cd foo`). Based on the idea of nvbn/thefuck#1442 by
+  @afresquet.
+
 ## 1.0.1 (2026-10-07)
 
 A security and robustness release, after a review of the whole code base.

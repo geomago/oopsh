@@ -4,11 +4,11 @@ Every issue that was open on [nvbn/thefuck](https://github.com/nvbn/thefuck/issu
 
 | Status | Count |
 |---|---|
-| fixed | 59 |
+| fixed | 61 |
 | works | 2 |
-| to re-check | 179 |
+| to re-check | 178 |
 | request | 25 |
-| discussion | 45 |
+| discussion | 44 |
 
 | Issue | Title | Area | Status | Notes |
 |---|---|---|---|---|
@@ -224,7 +224,7 @@ Every issue that was open on [nvbn/thefuck](https://github.com/nvbn/thefuck/issu
 | [#1436](https://github.com/nvbn/thefuck/issues/1436) | Feature Request: Instant-Interactive Mode + Zoxide with FZF | performance | to re-check |  |
 | [#1439](https://github.com/nvbn/thefuck/issues/1439) | apt command completion error | install | to re-check |  |
 | [#1440](https://github.com/nvbn/thefuck/issues/1440) | Alternative Exit sequence? | other | to re-check |  |
-| [#1441](https://github.com/nvbn/thefuck/issues/1441) | Doesn't work in nushell (sees it as generic shell) | shell:other | to re-check |  |
+| [#1441](https://github.com/nvbn/thefuck/issues/1441) | Doesn't work in nushell (sees it as generic shell) | shell:other | fixed | Nushell support |
 | [#1460](https://github.com/nvbn/thefuck/issues/1460) | I get a error when i run fuck command in windows, installed fuck with pip | install | to re-check |  |
 | [#1461](https://github.com/nvbn/thefuck/issues/1461) | Tests failures on aarch64 | windows | to re-check |  |
 | [#1462](https://github.com/nvbn/thefuck/issues/1462) | Is there any proper documentation on how to install The Fuck on Windows CMD? | install | to re-check |  |
@@ -307,7 +307,7 @@ Every issue that was open on [nvbn/thefuck](https://github.com/nvbn/thefuck/issu
 | [#1057](https://github.com/nvbn/thefuck/issues/1057) | TypeError: 'DeprecationWrapper' object is not callable | meta | discussion |  |
 | [#1146](https://github.com/nvbn/thefuck/issues/1146) | [SUGGESTION] Write to stdin instead of using the confirmation prompt | meta | discussion |  |
 | [#1159](https://github.com/nvbn/thefuck/issues/1159) | Feature Request: Correct me when I type `figlet moo \| cowsay` | meta | discussion |  |
-| [#1254](https://github.com/nvbn/thefuck/issues/1254) | Alias for nushell | meta | discussion |  |
+| [#1254](https://github.com/nvbn/thefuck/issues/1254) | Alias for nushell | meta | fixed | Nushell support |
 | [#1337](https://github.com/nvbn/thefuck/issues/1337) | Proposition: rules with no alternative command and only side effects | meta | discussion |  |
 | [#1346](https://github.com/nvbn/thefuck/issues/1346) | [fish] Some command output is missing | meta | discussion |  |
 | [#1377](https://github.com/nvbn/thefuck/issues/1377) | Adding Support For Mendel Development Kit (MDT) | meta | discussion |  |

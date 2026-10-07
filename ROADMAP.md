@@ -42,7 +42,7 @@ The command layout:
 | Env vars              | `THEFUCK_*`                      | `OOPSH_*`                          |
 
 - [x] Rename the Python package to `oopsh` and the entry points to `oopsh` (main) / `oops` (first run)
-- [x] `--alias` generates both the `oops` and the `oopsh` shell functions (bash, zsh, fish, PowerShell).
+- [x] `--alias` generates both the `oops` and the `oopsh` shell functions (bash, zsh, fish, PowerShell, Nushell).
       `oopsh` passes executable arguments (`--alias`, `--version`, `--help`, …) to the binary,
       everything else to `oops`. tcsh and generic POSIX shells get `oops` only
 - [x] Update the first-run setup (`not_configured`) for the new names
@@ -122,7 +122,8 @@ Once 1.0 is out, be findable where thefuck users look for a replacement. Every s
 
 - [ ] Startup time: `oopsh --alias` went from ~70 to ~60 ms; lazy rule loading for the fix itself;
       make instant mode stable
-- [ ] Nushell support done properly (nvbn/thefuck#1254, #1441; the PR #1442 ran fixes in a subprocess)
+- [x] Nushell support (nvbn/thefuck#1254, #1441): the fix runs in a subprocess, like in the PR #1442,
+      and the alias follows its `cd`
 - [ ] Esc to cancel the selection without breaking the arrow keys (nvbn/thefuck#1506)
 - [ ] `--shell` option, or document `TF_SHELL` (nvbn/thefuck#1536, #1538)
 - [ ] Commands wrapped by others, like `hub` for `git` (nvbn/thefuck#1101)

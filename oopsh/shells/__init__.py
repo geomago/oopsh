@@ -10,6 +10,7 @@ from .generic import Generic
 from .tcsh import Tcsh
 from .zsh import Zsh
 from .powershell import Powershell
+from .nushell import Nushell
 
 shells = {'bash': Bash,
           'fish': Fish,
@@ -17,7 +18,8 @@ shells = {'bash': Bash,
           'csh': Tcsh,
           'tcsh': Tcsh,
           'powershell': Powershell,
-          'pwsh': Powershell}
+          'pwsh': Powershell,
+          'nu': Nushell}
 
 
 def _get_shell_from_env():

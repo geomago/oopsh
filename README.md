@@ -114,7 +114,7 @@ Reading package lists... Done
 ## Requirements
 
 - Python 3.10+
-- Linux, macOS or Windows; Bash, Zsh, Fish, PowerShell or tcsh
+- Linux, macOS or Windows; Bash, Zsh, Fish, PowerShell, tcsh or Nushell
 
 ##### [Back to Contents](#contents)
 
@@ -152,6 +152,18 @@ For other shells:
 | Fish       | `~/.config/fish/config.fish` | `oopsh --alias \| source` |
 | PowerShell | `$PROFILE`       | `iex "$(oopsh --alias)"`     |
 | tcsh       | `~/.tcshrc`      | ``eval `oopsh --alias` ``    |
+
+Nushell parses code before running it, so the alias goes to a file that nushell
+loads after `config.nu`. Add this line to `config.nu` (`config nu` opens it):
+
+```nu
+mkdir ($nu.data-dir | path join vendor autoload); oopsh --alias | save -f (($nu.data-dir | path join vendor autoload) | path join oopsh.nu)
+```
+
+Nushell has no `eval`, so the fix runs in a subprocess (`sh`, or `nu` where
+there's no `sh`). When the fix ends in another directory, like
+`mkdir -p foo && cd foo`, the alias moves the shell there too; environment
+variables set by a fix are lost.
 
 Changes are only available in a new shell session. To make changes immediately
 available, run `source ~/.bashrc` (or your shell config file like `.zshrc`).
@@ -210,7 +222,7 @@ brew upgrade oopsh
 ## Uninstall
 
 To remove oopsh, reverse the installation process:
-- erase or comment the `oopsh --alias` line from your Bash, Zsh, Fish, PowerShell, tcsh, ... shell config
+- erase or comment the `oopsh --alias` line from your Bash, Zsh, Fish, PowerShell, tcsh, Nushell, ... shell config
 - uninstall the package: `pipx uninstall oopsh` (or `uv tool uninstall oopsh`, or `brew uninstall oopsh`)
 
 ## How it works
