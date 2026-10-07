@@ -4,6 +4,20 @@ All notable changes to oopsh are listed here. oopsh is a maintained fork of
 [thefuck](https://github.com/nvbn/thefuck); this file starts from thefuck 3.32,
 its last release.
 
+## Unreleased
+
+### Security
+
+- Branch names copied from git's output into fixes are now quoted. Git allows
+  characters like `;` and `$(` in branch names, so a crafted branch name could
+  run shell code through `git_push`, `git_pull`,
+  `git_push_different_branch_names` or `git_branch_exists` (the same issue was
+  reported on The Bleep, another thefuck successor).
+
+### Fixed
+
+- The source distribution includes the whole test suite.
+
 ## 1.0.0 (2026-10-07)
 
 First release of oopsh, based on thefuck 3.32 and the unreleased thefuck commits

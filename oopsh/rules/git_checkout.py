@@ -44,6 +44,6 @@ def get_new_command(command):
 
     if not new_commands:
         new_commands.append(shell.and_('git branch {}', '{}').format(
-            missing_file, command.script))
+            utils.quote_if_unsafe(missing_file), command.script))
 
     return new_commands

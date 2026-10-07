@@ -1,5 +1,5 @@
 import re
-from oopsh.utils import replace_argument
+from oopsh.utils import quote_if_unsafe, replace_argument
 from oopsh.specific.git import git_support
 
 
@@ -39,7 +39,10 @@ def get_new_command(command):
         while len(command_parts) > push_idx and command_parts[len(command_parts) - 1][0] != '-':
             command_parts.pop(len(command_parts) - 1)
 
-    arguments = re.findall(r'git push (.*)', command.output)[-1].replace("'", r"\'").strip()
-    # git's own suggestion, with the quotes already escaped
+    # git's suggestion contains the branch name, which can hold characters
+    # the shell would interpret (`;`, `$(...)`): quote word by word
+    arguments = ' '.join(
+        quote_if_unsafe(argument) for argument in
+        re.findall(r'git push (.*)', command.output)[-1].strip().split(' '))
     return replace_argument(" ".join(command_parts), 'push',
                             'push {}'.format(arguments), quote=False)

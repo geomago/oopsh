@@ -84,3 +84,43 @@ def test_output_text_is_quoted(rule, script, output, expected):
     if isinstance(new_command, list):
         new_command = new_command[0]
     assert new_command == expected
+
+
+EVIL_BRANCH = 'x;touch$IFS/tmp/pwned'
+
+
+@pytest.mark.parametrize('rule, script, output', [
+    ('git_push', 'git push',
+     'fatal: The current branch {0} has no upstream branch.\n'
+     'To push the current branch and set the remote as upstream, use\n\n'
+     '    git push --set-upstream origin {0}\n\n'.format(EVIL_BRANCH)),
+    ('git_pull', 'git pull',
+     'There is no tracking information for the current branch.\n\n'
+     '    git branch --set-upstream-to=<remote>/<branch> {}\n'.format(EVIL_BRANCH)),
+    ('git_push_different_branch_names', 'git push',
+     'fatal: The upstream branch of your current branch does not match\n'
+     'the name of your current branch.  To push to the upstream branch\n'
+     'on the remote, use\n\n'
+     '    git push origin HEAD:{}\n'.format(EVIL_BRANCH)),
+    ('git_branch_exists', 'git branch foo',
+     "fatal: A branch named '{}' already exists.".format(EVIL_BRANCH))])
+def test_branch_names_are_quoted(rule, script, output):
+    """Git allows `;` and `$` in branch names; they must not run as shell
+    code (reported on The Bleep, a sibling fork, as its issue #2)."""
+    module = importlib.import_module('oopsh.rules.' + rule)
+    new_commands = module.get_new_command(Command(script, output))
+    if isinstance(new_commands, str):
+        new_commands = [new_commands]
+    for new_command in new_commands:
+        assert not _unquoted(new_command, ';$'), new_command
+
+
+def _unquoted(script, characters):
+    """Characters of `characters` that appear outside single quotes."""
+    found, quoted = [], False
+    for char in script:
+        if char == "'":
+            quoted = not quoted
+        elif char in characters and not quoted:
+            found.append(char)
+    return found
