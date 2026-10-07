@@ -112,6 +112,22 @@ class TestRule(object):
         assert (list(rule.get_corrected_commands(Command('test', '')))
                 == [CorrectedCommand(script='test!', priority=100)])
 
+    def test_get_corrected_commands_when_rule_fails(self, mocker):
+        rule_failed = mocker.patch('oopsh.types.logs.rule_failed')
+
+        def get_new_command(command):
+            return [][0]
+
+        rule = Rule(get_new_command=get_new_command, priority=100)
+        assert list(rule.get_corrected_commands(Command('test', ''))) == []
+        assert rule_failed.called
+
+    def test_get_corrected_commands_skips_empty_fixes(self):
+        rule = Rule(get_new_command=lambda x: ['', None, 'test!'],
+                    priority=100)
+        assert (list(rule.get_corrected_commands(Command('test', '')))
+                == [CorrectedCommand(script='test!', priority=300)])
+
 
 class TestCommand(object):
     @pytest.fixture(autouse=True)

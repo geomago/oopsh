@@ -189,10 +189,20 @@ class Rule(object):
         :rtype: Iterable[CorrectedCommand]
 
         """
-        new_commands = self.get_new_command(command)
-        if not isinstance(new_commands, list):
-            new_commands = (new_commands,)
+        # A rule failing on an output it didn't expect must not take down
+        # the fixes of the other rules
+        try:
+            new_commands = self.get_new_command(command)
+            if isinstance(new_commands, list):
+                new_commands = list(new_commands)
+            else:
+                new_commands = [new_commands]
+        except Exception:
+            logs.rule_failed(self, sys.exc_info())
+            return
         for n, new_command in enumerate(new_commands):
+            if not new_command:
+                continue
             yield CorrectedCommand(script=new_command,
                                    side_effect=self.side_effect,
                                    priority=(n + 1) * self.priority)
