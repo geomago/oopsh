@@ -1,3 +1,4 @@
+import shlex
 import pytest
 from oopsh.rules.su import match, get_new_command
 from oopsh.types import Command
@@ -22,9 +23,14 @@ def test_not_match(script, output):
 
 
 @pytest.mark.parametrize('before, after', [
-    ('sudo ls', 'su -c "ls"'),
-    ('sudo echo a > b', 'su -c "echo a > b"'),
-    ('sudo echo "a" >> b', 'su -c "echo \\"a\\" >> b"'),
-    ('sudo mkdir && touch a', 'su -c "mkdir && touch a"')])
+    ('sudo ls', 'su -c ls'),
+    ('sudo echo a > b', "su -c 'echo a > b'"),
+    ('sudo echo "a" >> b', "su -c 'echo \"a\" >> b'"),
+    ('sudo mkdir && touch a', "su -c 'mkdir && touch a'")])
 def test_get_new_command(before, after):
     assert get_new_command(Command(before, '')) == after
+
+
+def test_get_new_command_runs_the_command_as_typed():
+    before = "sudo echo 'a$(id)' > /etc/x"
+    assert shlex.split(get_new_command(Command(before, ''))) == ['su', '-c', before[5:]]

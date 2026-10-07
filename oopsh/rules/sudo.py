@@ -1,3 +1,6 @@
+import re
+import shlex
+
 patterns = ['permission denied',
             'eacces',
             'pkg: insufficient privileges',
@@ -39,9 +42,12 @@ def match(command):
 
 
 def get_new_command(command):
-    if '&&' in command.script:
-        return u'sudo sh -c "{}"'.format(" ".join([part for part in command.script_parts if part != "sudo"]))
-    elif '>' in command.script:
-        return u'sudo sh -c "{}"'.format(command.script.replace('"', '\\"'))
+    if '&&' in command.script or '>' in command.script:
+        # sudo must cover the whole command line. Single quotes pass it to
+        # the root shell exactly as typed: in double quotes, `$(...)` and
+        # backticks would run first in the user's shell, and text the user
+        # had quoted could run as code, as root
+        script = re.sub(r'^\s*sudo\s+', '', command.script)
+        return u'sudo sh -c {}'.format(shlex.quote(script))
     else:
         return u'sudo {}'.format(command.script)

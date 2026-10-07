@@ -1,3 +1,4 @@
+import shlex
 import pytest
 from oopsh.rules.sudo import match, get_new_command
 from oopsh.types import Command
@@ -27,8 +28,20 @@ def test_not_match():
 
 @pytest.mark.parametrize('before, after', [
     ('ls', 'sudo ls'),
-    ('echo a > b', 'sudo sh -c "echo a > b"'),
-    ('echo "a" >> b', 'sudo sh -c "echo \\"a\\" >> b"'),
-    ('mkdir && touch a', 'sudo sh -c "mkdir && touch a"')])
+    ('echo a > b', "sudo sh -c 'echo a > b'"),
+    ('echo "a" >> b', "sudo sh -c 'echo \"a\" >> b'"),
+    ('mkdir && touch a', "sudo sh -c 'mkdir && touch a'"),
+    ('sudo mkdir a && sudo touch a', "sudo sh -c 'mkdir a && sudo touch a'")])
 def test_get_new_command(before, after):
     assert get_new_command(Command(before, '')) == after
+
+
+@pytest.mark.parametrize('before', [
+    "echo 'a$(id)' > /etc/x",
+    'echo "`id`" > /etc/x && cat /etc/x',
+    "printf '%s' \"$HOME\" >> /root/log"])
+def test_get_new_command_runs_the_command_as_typed(before):
+    """The root shell gets the command exactly as typed: nothing in it is
+    expanded first by the user's shell (possibly the report in
+    nvbn/thefuck#1606)."""
+    assert shlex.split(get_new_command(Command(before, ''))) == ['sudo', 'sh', '-c', before]
