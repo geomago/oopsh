@@ -372,8 +372,13 @@ def get_installation_version():
     return version('oopsh')
 
 
+# The alias name ends up in generated shell code and in fixes
+ALIAS_NAME = re.compile(r'^[A-Za-z_][A-Za-z0-9_-]*$')
+
+
 def get_alias():
-    return os.environ.get('TF_ALIAS', 'oops')
+    alias = os.environ.get('TF_ALIAS', 'oops')
+    return alias if ALIAS_NAME.match(alias) else 'oops'
 
 
 @memoize

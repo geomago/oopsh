@@ -35,3 +35,14 @@ def _args(**override):
      _args(shell_logger='/tmp/log'))])
 def test_parse(argv, result):
     assert vars(Parser().parse(argv)) == result
+
+
+@pytest.mark.parametrize('name', ['oops', 'fuck', 'FUCK', 'fix_it', 'my-fix'])
+def test_alias_names(name):
+    assert Parser().parse(['oopsh', '--alias', name]).alias == name
+
+
+@pytest.mark.parametrize('name', ['x; rm -rf ~', '$(id)', 'a b', '-x'])
+def test_invalid_alias_names(name, capsys):
+    with pytest.raises(SystemExit):
+        Parser().parse(['oopsh', '--alias=' + name])

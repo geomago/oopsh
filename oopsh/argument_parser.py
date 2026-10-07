@@ -1,7 +1,14 @@
 import sys
-from argparse import ArgumentParser, SUPPRESS
+from argparse import ArgumentParser, ArgumentTypeError, SUPPRESS
 from .const import ARGUMENT_PLACEHOLDER
-from .utils import get_alias
+from .utils import ALIAS_NAME, get_alias
+
+
+def _alias_name(name):
+    if not ALIAS_NAME.match(name):
+        raise ArgumentTypeError(
+            'the alias must be a plain command name, like oops or fix')
+    return name
 
 
 class Parser(object):
@@ -24,6 +31,7 @@ class Parser(object):
             '-a', '--alias',
             nargs='?',
             const=get_alias(),
+            type=_alias_name,
             help='[custom-alias-name] prints alias for current shell')
         self._parser.add_argument(
             '-l', '--shell-logger',

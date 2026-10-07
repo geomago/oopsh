@@ -365,3 +365,11 @@ def test_is_private_group(mocker):
     assert _is_private_group(1)
     assert not _is_private_group(2)
     assert not _is_private_group(3)
+
+
+@pytest.mark.parametrize('tf_alias, alias', [
+    ('fuck', 'fuck'), ('my-fix', 'my-fix'), ('x;id', 'oops'), ('$(id)', 'oops')])
+def test_get_alias(os_environ, tf_alias, alias):
+    from oopsh.utils import get_alias
+    os_environ['TF_ALIAS'] = tf_alias
+    assert get_alias() == alias
