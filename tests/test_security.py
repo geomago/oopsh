@@ -9,6 +9,9 @@ import pytest
 from oopsh.types import Command
 
 
+# The tests replace os.environ; Windows can't start processes without it
+REAL_ENVIRONMENT = dict(os.environ)
+
 EVIL_URL = 'https://example.com;touch${IFS}/tmp/poc_yarn'
 
 
@@ -140,7 +143,8 @@ def test_only_the_fix_reaches_stdout(capfd, mocker, settings):
 
     def side_effect(old_command, script):
         print('printed by a side effect')
-        subprocess.call([sys.executable, '-c', 'print("child process")'])
+        subprocess.call([sys.executable, '-c', 'print("child process")'],
+                        env=REAL_ENVIRONMENT)
 
     mocker.patch.object(fix_command_module, 'get_corrected_commands', return_value=[])
     mocker.patch.object(fix_command_module, 'select_command',
