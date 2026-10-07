@@ -232,3 +232,14 @@ def test_not_match_shell_errors(mocker, monkeypatch, output):
     mocker.patch('os.path.isfile', return_value=True)
     monkeypatch.setenv('EDITOR', 'dummy_editor')
     assert not match(Command('pacmn', output))
+
+
+@pytest.mark.usefixtures('no_memoize')
+def test_get_new_command_quotes_the_file(mocker, monkeypatch):
+    """The file name comes from the output: a name with spaces or `;` must
+    stay one argument."""
+    mocker.patch('os.path.isfile', return_value=True)
+    monkeypatch.setenv('EDITOR', 'vim')
+    output = '  File "/src/my app;rm -rf ~.py", line 3\n'
+    assert (get_new_command(Command('python app.py', output))
+            == "vim '/src/my app;rm -rf ~.py' +3 && python app.py")

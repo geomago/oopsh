@@ -1,6 +1,6 @@
 import re
 import os
-from oopsh.utils import memoize, default_settings
+from oopsh.utils import UNSAFE_CHARACTERS, default_settings, memoize
 from oopsh.conf import settings
 from oopsh.shells import shell
 
@@ -66,6 +66,14 @@ def match(command):
     return _search(command.output)
 
 
+def _quote(path):
+    """The file name comes from the output: keep it one argument, and don't
+    let shell characters in it run as code."""
+    if re.search(r'\s', path) or UNSAFE_CHARACTERS.search(path):
+        return shell.quote(path)
+    return path
+
+
 @default_settings({'fixlinecmd': u'{editor} {file} +{line}',
                    'fixcolcmd': None})
 def get_new_command(command):
@@ -75,12 +83,12 @@ def get_new_command(command):
     # ignored by default
     if settings.fixcolcmd and 'col' in m.groupdict():
         editor_call = settings.fixcolcmd.format(editor=os.environ['EDITOR'],
-                                                file=m.group('file'),
+                                                file=_quote(m.group('file')),
                                                 line=m.group('line'),
                                                 col=m.group('col'))
     else:
         editor_call = settings.fixlinecmd.format(editor=os.environ['EDITOR'],
-                                                 file=m.group('file'),
+                                                 file=_quote(m.group('file')),
                                                  line=m.group('line'))
 
     return shell.and_(editor_call, command.script)
