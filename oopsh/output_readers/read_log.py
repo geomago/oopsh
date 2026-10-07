@@ -5,6 +5,7 @@ import re
 from shutil import get_terminal_size
 from ..exceptions import ScriptNotInLog
 from .. import const, logs
+from ..utils import is_private
 
 
 def _group_by_calls(log):
@@ -66,10 +67,7 @@ def _skip_old_lines(log_file):
 def _is_trusted_log(fd):
     """The log must belong to the user and not be writable by others,
     otherwise someone else could plant the output rules build commands from."""
-    if not hasattr(os, 'getuid'):
-        return True
-    stat = os.fstat(fd)
-    return stat.st_uid == os.getuid() and not stat.st_mode & 0o022
+    return is_private(os.fstat(fd))
 
 
 def get_output(script):

@@ -3,6 +3,7 @@ import sys
 from .conf import settings
 from .types import Rule
 from .system import Path
+from .utils import is_private
 from . import logs
 
 
@@ -28,10 +29,9 @@ def _is_trusted_dir(path):
         return True
     for directory in (path, path.parent):
         try:
-            stat = directory.stat()
+            if not is_private(directory.stat(), owners=(0, os.getuid())):
+                return False
         except OSError:
-            return False
-        if stat.st_uid not in (0, os.getuid()) or stat.st_mode & 0o022:
             return False
     return True
 

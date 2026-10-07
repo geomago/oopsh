@@ -54,11 +54,15 @@ def test_shell_logger_log_is_private(tmp_path, mocker, monkeypatch):
 
 
 @pytest.mark.skipif(not hasattr(os, 'getuid'), reason='unix permissions')
-@pytest.mark.parametrize('mode, trusted', [
-    (0o600, True), (0o644, True), (0o620, False), (0o666, False)])
-def test_read_log_ignores_logs_others_can_write(tmp_path, mode, trusted):
-    """nvbn/thefuck#1622"""
+@pytest.mark.parametrize('mode, private_group, trusted', [
+    (0o600, False, True), (0o644, False, True), (0o620, False, False),
+    (0o620, True, True), (0o666, True, False)])
+def test_read_log_ignores_logs_others_can_write(tmp_path, mocker, mode,
+                                                private_group, trusted):
+    """nvbn/thefuck#1622. Group-writable is fine when the group is the
+    user's private one (umask 002)."""
     from oopsh.output_readers.read_log import _is_trusted_log
+    mocker.patch('oopsh.utils._is_private_group', return_value=private_group)
     log = tmp_path / 'log'
     log.write_bytes(b'')
     log.chmod(mode)

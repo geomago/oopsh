@@ -350,3 +350,18 @@ class TestCacheDir(object):
         cache._setup_db()
         assert cache._db == {}
         assert not shelve_open.called
+
+
+@pytest.mark.skipif(not hasattr(os, 'getuid'), reason='unix groups')
+def test_is_private_group(mocker):
+    from oopsh.utils import _is_private_group
+    grp = pytest.importorskip('grp')
+    mocker.patch('pwd.getpwuid', return_value=Mock(pw_name='me'))
+    mocker.patch('grp.getgrgid', side_effect=lambda gid: {
+        1: Mock(gr_name='me', gr_mem=[]),
+        2: Mock(gr_name='staff', gr_mem=['me', 'you']),
+        3: Mock(gr_name='me', gr_mem=['me', 'you'])}[gid])
+    assert grp
+    assert _is_private_group(1)
+    assert not _is_private_group(2)
+    assert not _is_private_group(3)

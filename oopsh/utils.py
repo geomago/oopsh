@@ -232,13 +232,33 @@ def get_cache_dir():
     return cache_dir
 
 
-def is_private(path):
-    """Returns `True` when `path` belongs to the user and others can't write
-    to it, so they can't plant content oopsh would trust."""
+def _is_private_group(gid):
+    """`True` for the user's private group: with the user private group
+    scheme (Debian, Ubuntu, Fedora...), the default umask 002 makes files
+    writable by a group named like the user, that only they belong to."""
+    try:
+        import grp
+        import pwd
+        group = grp.getgrgid(gid)
+        user = pwd.getpwuid(os.getuid()).pw_name
+    except (ImportError, KeyError):
+        return False
+    return group.gr_name == user and set(group.gr_mem) <= {user}
+
+
+def is_private(path_or_stat, owners=None):
+    """Returns `True` when the file belongs to the user (or to one of
+    `owners`) and nobody else can write to it, so others can't plant
+    content oopsh would trust."""
     if not hasattr(os, 'getuid'):
         return True
-    stat = os.stat(path)
-    return stat.st_uid == os.getuid() and not stat.st_mode & 0o022
+    stat = path_or_stat if isinstance(path_or_stat, os.stat_result) \
+        else os.stat(path_or_stat)
+    if stat.st_uid not in (owners or (os.getuid(),)):
+        return False
+    if stat.st_mode & 0o002:
+        return False
+    return not stat.st_mode & 0o020 or _is_private_group(stat.st_gid)
 
 
 class Cache(object):

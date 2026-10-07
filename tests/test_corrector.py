@@ -75,13 +75,16 @@ def test_organize_commands():
 
 
 @pytest.mark.skipif(not hasattr(os, 'getuid'), reason='unix permissions')
-@pytest.mark.parametrize('package_mode, rules_mode, trusted', [
-    (0o755, 0o755, True),
-    (0o775, 0o755, False),
-    (0o755, 0o777, False)])
-def test_contrib_rules_only_from_trusted_dirs(tmp_path, monkeypatch, settings,
-                                              package_mode, rules_mode, trusted):
+@pytest.mark.parametrize('package_mode, rules_mode, private_group, trusted', [
+    (0o755, 0o755, False, True),
+    (0o775, 0o755, False, False),
+    (0o775, 0o775, True, True),
+    (0o755, 0o777, True, False)])
+def test_contrib_rules_only_from_trusted_dirs(tmp_path, monkeypatch, mocker, settings,
+                                              package_mode, rules_mode,
+                                              private_group, trusted):
     """nvbn/thefuck#1623"""
+    mocker.patch('oopsh.utils._is_private_group', return_value=private_group)
     settings.user_dir = tmp_path / 'config'
     rules = tmp_path / 'oopsh_contrib_foo' / 'rules'
     rules.mkdir(parents=True)
