@@ -86,7 +86,8 @@ The first release waits until this milestone is done.
       fix the real bugs found, including five security reports
 - [ ] Reproduce the ~180 issues marked "to re-check" on oopsh
 - [x] `CONTRIBUTING.md`, `SECURITY.md`, issue forms, PR template, code of conduct
-- [ ] Enable private vulnerability reporting on GitHub; create the `bug` and `rule request` labels
+- [x] Create the `bug` and `rule request` labels
+- [ ] Enable private vulnerability reporting on GitHub
 
 ## Milestone 6: First release (oopsh 1.0)
 
@@ -102,7 +103,7 @@ The first release waits until this milestone is done.
 - [ ] Where the thefuck package is broken on Python 3.12+ (Homebrew, AUR, nixpkgs, Debian/Ubuntu),
       report it with a link to the fix; once oopsh has some traction, propose it as a new package
 - [ ] Windows: Scoop / winget
-- [ ] Decide what to do with the `snapcraft.yaml` and `install.sh` inherited from upstream (still say thefuck)
+- [x] Remove the `snapcraft.yaml` and `install.sh` inherited from upstream
 
 ## Milestone 8: Launch
 
