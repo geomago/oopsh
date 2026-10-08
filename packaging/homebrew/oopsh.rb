@@ -3,8 +3,8 @@ class Oopsh < Formula
 
   desc "Corrects your previous console command (maintained fork of thefuck)"
   homepage "https://github.com/geomago/oopsh"
-  url "https://files.pythonhosted.org/packages/0a/5d/a6cf2ac8e3ce53ff78adba038986ec1aa2185611ca6a56019a05559fe39e/oopsh-1.1.0.tar.gz"
-  sha256 "b33eb4b9fb00f0bab0ee811dd03531f6af4cb989283dcf31a1b5bca5fd6ec335"
+  url "https://files.pythonhosted.org/packages/7e/33/388e99ec9667f8270e1c1244dde15e3d4bfb897ab735c9e24ff06a8cabb5/oopsh-1.1.1.tar.gz"
+  sha256 "f1d9220a0ea298dbc935be6bde296651dd18da031fccd1ed666fb8af53a033cd"
   license "MIT"
 
   depends_on "python@3.14"
