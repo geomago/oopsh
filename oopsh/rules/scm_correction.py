@@ -1,3 +1,4 @@
+import os
 from oopsh.utils import for_app, memoize, replace_command_name
 from oopsh.system import Path
 
@@ -21,10 +22,12 @@ def _get_actual_scm():
 
 @for_app(*wrong_scm_patterns.keys())
 def match(command):
-    scm = command.script_parts[0]
-    pattern = wrong_scm_patterns[scm]
+    scm = next((os.path.basename(part) for part in command.script_parts
+                if os.path.basename(part) in wrong_scm_patterns), None)
+    if scm is None:
+        return False
 
-    return pattern in command.output and _get_actual_scm()
+    return wrong_scm_patterns[scm] in command.output and _get_actual_scm()
 
 
 def get_new_command(command):

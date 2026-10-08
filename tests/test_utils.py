@@ -196,7 +196,14 @@ def test_get_all_matched_commands(stderr, result):
     ('/bin/hdfs dfs -rm foo', ['hdfs'], True),
     ('git diff', ['git', 'hub'], True),
     ('hub diff', ['git', 'hub'], True),
-    ('hg diff', ['git', 'hub'], False)])
+    ('hg diff', ['git', 'hub'], False),
+    # Leading env-var assignments and wrapper words are skipped
+    # (nvbn/thefuck#1172, #1278).
+    ('TERM=xterm-256color ssh host', ['ssh'], True),
+    ('LC_ALL=C GIT_TRACE=1 git diff', ['git', 'hub'], True),
+    ('noglob git push', ['git', 'hub'], True),
+    ('command hg diff', ['git', 'hub'], False),
+    ('FOO=bar baz', ['git'], False)])
 def test_is_app(script, names, result):
     assert is_app(Command(script, ''), *names) == result
 

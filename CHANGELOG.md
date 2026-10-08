@@ -4,6 +4,26 @@ All notable changes to oopsh are listed here. oopsh is a maintained fork of
 [thefuck](https://github.com/nvbn/thefuck); this file starts from thefuck 3.32,
 its last release.
 
+## 1.1.2 (2026-10-08)
+
+Bug fixes from re-checking the upstream issue backlog.
+
+### Fixed
+
+- Rules now recognise a command even when it is preceded by environment-variable
+  assignments or wrapper words, e.g. `TERM=xterm-256color ssh ...` or
+  `noglob git push` (nvbn/thefuck#1172, #1278). Previously such commands matched
+  no rule.
+- `brew_install` and `brew_cask_dependency` no longer raise on modern Homebrew
+  output that suggests a cask inside a sentence (`Did you mean to type "brew cask
+  install ..."?`) (nvbn/thefuck#936).
+
+### Added
+
+- New `brew_cask` rule: modern Homebrew disabled the `brew cask <cmd>` syntax, so
+  `brew cask reinstall X` is corrected to `brew reinstall --cask X` (and likewise
+  for `install`/`uninstall`/`upgrade`) (nvbn/thefuck#1144).
+
 ## 1.1.1 (2026-10-08)
 
 ### Added

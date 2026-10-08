@@ -71,3 +71,10 @@ def test_get_new_command_quotes_suggestions():
               'Did you mean evil; touch /tmp/pwned?')
     assert (get_new_command(Command('brew install foo', output))
             == ["brew install 'evil; touch /tmp/pwned'"])
+
+
+def test_not_match_cask_hint():
+    """Modern brew's cask hint must not match (nvbn/thefuck#936)."""
+    output = ('Error: No available formula with the name "sublime-merge".\n'
+              'Did you mean to type "brew cask install sublime-merge"?')
+    assert not match(Command('brew install sublime-merge', output))

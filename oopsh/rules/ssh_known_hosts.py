@@ -9,8 +9,6 @@ commands = ('ssh', 'scp')
 def match(command):
     if not command.script:
         return False
-    if not command.script.startswith(commands):
-        return False
 
     patterns = (
         r'WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!',

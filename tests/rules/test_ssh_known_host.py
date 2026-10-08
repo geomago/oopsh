@@ -47,6 +47,9 @@ def test_match(ssh_error):
     assert match(Command('ssh', errormsg))
     assert match(Command('scp something something', errormsg))
     assert match(Command('scp something something', errormsg))
+    # An env-var assignment before ssh must not hide the match
+    # (nvbn/thefuck#1172).
+    assert match(Command('TERM=xterm-256color ssh host', errormsg))
     assert not match(Command(errormsg, ''))
     assert not match(Command('notssh', errormsg))
     assert not match(Command('ssh', ''))

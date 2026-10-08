@@ -195,6 +195,23 @@ def replace_command(command, broken, matched):
             for new_cmd in new_cmds]
 
 
+_ENV_ASSIGNMENT_RE = re.compile(r'^[A-Za-z_][A-Za-z0-9_]*=')
+
+#: Words that may precede the actual command without changing which app it is,
+#: such as `TERM=xterm ssh ...` or `noglob git ...`.
+_COMMAND_PREFIXES = ('noglob', 'command', 'builtin', 'exec')
+
+
+def _command_name_index(script_parts):
+    """Index of the first part that names the command, skipping leading
+    environment-variable assignments and wrapper words."""
+    for index, part in enumerate(script_parts):
+        if _ENV_ASSIGNMENT_RE.match(part) or part in _COMMAND_PREFIXES:
+            continue
+        return index
+    return None
+
+
 @memoize
 def is_app(command, *app_names, **kwargs):
     """Returns `True` if command is call to one of passed app names."""
@@ -204,7 +221,9 @@ def is_app(command, *app_names, **kwargs):
         raise TypeError("got an unexpected keyword argument '{}'".format(kwargs.keys()))
 
     if len(command.script_parts) > at_least:
-        return os.path.basename(command.script_parts[0]) in app_names
+        index = _command_name_index(command.script_parts)
+        if index is not None:
+            return os.path.basename(command.script_parts[index]) in app_names
 
     return False
 
