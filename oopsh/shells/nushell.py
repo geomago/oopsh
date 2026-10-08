@@ -1,6 +1,10 @@
 from subprocess import Popen, PIPE
 import os
+import sqlite3
+from ..conf import settings
 from ..const import ARGUMENT_PLACEHOLDER, EXECUTABLE, EXECUTABLE_ARGUMENTS
+from ..logs import warn
+from ..system import Path
 from ..utils import DEVNULL
 from .generic import Generic, ShellConfiguration
 
@@ -89,9 +93,49 @@ class Nushell(Generic):
         return aliases
 
     def _get_history_file_name(self):
-        # The SQLite history isn't supported
         path = os.environ.get('OOPSH_NU_HISTORY', '')
-        return path if path.endswith('.txt') else ''
+        return path if path.endswith(('.txt', '.sqlite3')) else ''
+
+    def _get_history_lines(self):
+        """Yield history entries, reading nushell's SQLite history when that
+        is the configured format (the default since nushell 0.80)."""
+        path = self._get_history_file_name()
+        if path.endswith('.sqlite3'):
+            for line in self._get_sqlite_history_lines(path):
+                yield line
+        else:
+            for line in super(Nushell, self)._get_history_lines():
+                yield line
+
+    def _get_sqlite_history_lines(self, path):
+        if not os.path.isfile(path):
+            return
+
+        query = 'SELECT command_line FROM history ORDER BY id'
+        if settings.history_limit:
+            # Keep the most recent entries, then restore chronological order.
+            query = ('SELECT command_line FROM (SELECT id, command_line FROM'
+                     ' history ORDER BY id DESC LIMIT {}) ORDER BY id'.format(
+                         int(settings.history_limit)))
+
+        try:
+            # Read-only so a corrupt or non-database file can't be altered and
+            # a missing file isn't created.
+            connection = sqlite3.connect(
+                '{}?mode=ro'.format(Path(path).as_uri()), uri=True)
+        except sqlite3.Error as exc:
+            warn(u'Can not open nushell history {}: {}'.format(path, exc))
+            return
+
+        try:
+            for (command_line,) in connection.execute(query):
+                prepared = (command_line or '').strip()
+                if prepared:
+                    yield prepared
+        except sqlite3.Error as exc:
+            warn(u'Can not read nushell history {}: {}'.format(path, exc))
+        finally:
+            connection.close()
 
     def how_to_configure(self):
         # Code is parsed before it runs, so `oopsh --alias | source` can't

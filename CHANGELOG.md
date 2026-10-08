@@ -4,6 +4,16 @@ All notable changes to oopsh are listed here. oopsh is a maintained fork of
 [thefuck](https://github.com/nvbn/thefuck); this file starts from thefuck 3.32,
 its last release.
 
+## 1.1.1 (2026-10-08)
+
+### Added
+
+- Nushell: read the SQLite command history (`history.sqlite3`), the default
+  format since nushell 0.80. Rules that scan the shell history (`history`,
+  `path_from_history`, `no_command`) now work for nushell users on a default
+  configuration, not only when the plain-text history is enabled. A corrupt or
+  locked history file is handled gracefully and never aborts a fix.
+
 ## 1.1.0 (2026-10-07)
 
 ### Added

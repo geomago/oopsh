@@ -60,9 +60,36 @@ class TestNushell(object):
         history_lines(['ls', 'rm'])
         assert list(shell.get_history()) == ['ls', 'rm']
 
-    def test_get_history_sqlite(self, shell, monkeypatch):
-        monkeypatch.setenv('OOPSH_NU_HISTORY', '/home/me/.config/nushell/history.sqlite3')
-        assert shell._get_history_file_name() == ''
+    def _make_sqlite_history(self, path, commands):
+        import sqlite3
+        connection = sqlite3.connect(str(path))
+        connection.execute(
+            'CREATE TABLE history (id INTEGER PRIMARY KEY, command_line TEXT)')
+        connection.executemany(
+            'INSERT INTO history (command_line) VALUES (?)',
+            [(command,) for command in commands])
+        connection.commit()
+        connection.close()
+
+    def test_get_history_sqlite(self, shell, monkeypatch, tmp_path):
+        history = tmp_path / 'history.sqlite3'
+        self._make_sqlite_history(history, ['ls', '', 'rm -rf /'])
+        monkeypatch.setenv('OOPSH_NU_HISTORY', str(history))
+        assert shell._get_history_file_name() == str(history)
+        # Blank entries are skipped, order is preserved.
+        assert list(shell.get_history()) == ['ls', 'rm -rf /']
+
+    def test_get_history_sqlite_limit(self, shell, monkeypatch, tmp_path, settings):
+        history = tmp_path / 'history.sqlite3'
+        self._make_sqlite_history(history, ['a', 'b', 'c', 'd'])
+        monkeypatch.setenv('OOPSH_NU_HISTORY', str(history))
+        settings.history_limit = 2
+        assert list(shell.get_history()) == ['c', 'd']
+
+    def test_get_history_sqlite_missing(self, shell, monkeypatch, tmp_path):
+        history = tmp_path / 'history.sqlite3'
+        monkeypatch.setenv('OOPSH_NU_HISTORY', str(history))
+        assert list(shell.get_history()) == []
 
     def test_how_to_configure(self, shell, Popen):
         Popen.return_value.stdout.read.return_value = \
