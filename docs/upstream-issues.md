@@ -4,9 +4,9 @@ Every issue that was open on [nvbn/thefuck](https://github.com/nvbn/thefuck/issu
 
 | Status | Count |
 |---|---|
-| fixed | 61 |
-| works | 2 |
-| to re-check | 178 |
+| fixed | 65 |
+| works | 9 |
+| to re-check | 167 |
 | request | 25 |
 | discussion | 44 |
 
@@ -75,7 +75,7 @@ Every issue that was open on [nvbn/thefuck](https://github.com/nvbn/thefuck/issu
 | [#862](https://github.com/nvbn/thefuck/issues/862) | Greek keyboard mapping incorrect | windows | works | Greek layout (test added) |
 | [#94](https://github.com/nvbn/thefuck/issues/94) | Statistics | other | to re-check |  |
 | [#104](https://github.com/nvbn/thefuck/issues/104) | Integrate it with zsh and it can learn rules? | shell:zsh | to re-check |  |
-| [#108](https://github.com/nvbn/thefuck/issues/108) | Doesn't handle pipes | other | to re-check |  |
+| [#108](https://github.com/nvbn/thefuck/issues/108) | Doesn't handle pipes | other | works | pipes handled now |
 | [#172](https://github.com/nvbn/thefuck/issues/172) | What if thefuck not installing? | install | to re-check |  |
 | [#178](https://github.com/nvbn/thefuck/issues/178) | Display issue on Git for Windows CLI | windows | to re-check |  |
 | [#302](https://github.com/nvbn/thefuck/issues/302) | How to install it on Windows? | install | to re-check |  |
@@ -111,7 +111,7 @@ Every issue that was open on [nvbn/thefuck](https://github.com/nvbn/thefuck/issu
 | [#636](https://github.com/nvbn/thefuck/issues/636) | evaluation buffer and fuck | other | to re-check |  |
 | [#642](https://github.com/nvbn/thefuck/issues/642) | thefuck: fork failed | install | to re-check |  |
 | [#646](https://github.com/nvbn/thefuck/issues/646) | No module named 'thefuck' | install | to re-check |  |
-| [#648](https://github.com/nvbn/thefuck/issues/648) | Suggest yarn add x for yarn install x | install | to re-check |  |
+| [#648](https://github.com/nvbn/thefuck/issues/648) | Suggest yarn add x for yarn install x | install | works | suggests `yarn add` |
 | [#649](https://github.com/nvbn/thefuck/issues/649) | error: Unable to find  vcvarsall.bat | other | to re-check |  |
 | [#653](https://github.com/nvbn/thefuck/issues/653) | Use py-backwards | other | to re-check |  |
 | [#654](https://github.com/nvbn/thefuck/issues/654) | Installing through brew / pip in Mac | install | to re-check |  |
@@ -145,13 +145,13 @@ Every issue that was open on [nvbn/thefuck](https://github.com/nvbn/thefuck/issu
 | [#891](https://github.com/nvbn/thefuck/issues/891) | I have installed but it doesn't work? | install | to re-check |  |
 | [#903](https://github.com/nvbn/thefuck/issues/903) | Issue after second run | other | to re-check |  |
 | [#906](https://github.com/nvbn/thefuck/issues/906) | Flutter is not accurate,Can you support it? | other | to re-check |  |
-| [#909](https://github.com/nvbn/thefuck/issues/909) | Problem using "fuck" with git push alias gp | other | to re-check |  |
+| [#909](https://github.com/nvbn/thefuck/issues/909) | Problem using "fuck" with git push alias gp | other | works | git_push finds the upstream (the `gp` alias is separate) |
 | [#911](https://github.com/nvbn/thefuck/issues/911) | Sudo Retry Fails on Fish | install | to re-check |  |
 | [#914](https://github.com/nvbn/thefuck/issues/914) | Why it doesn't work after I pressed enter while it print [enter/↑/↓/ctrl+c] ? | windows | to re-check |  |
 | [#927](https://github.com/nvbn/thefuck/issues/927) | .bash_history permission denied despite running on latest version | other | to re-check |  |
 | [#929](https://github.com/nvbn/thefuck/issues/929) | how to use it in windows | install | to re-check |  |
 | [#935](https://github.com/nvbn/thefuck/issues/935) | Rule `rules.git_checkout` does not work with file checkout. | shell:zsh | to re-check |  |
-| [#936](https://github.com/nvbn/thefuck/issues/936) | Thefuck crashes when applying `brew_cask_dependency` rule | install | to re-check |  |
+| [#936](https://github.com/nvbn/thefuck/issues/936) | Thefuck crashes when applying `brew_cask_dependency` rule | install | fixed | brew_install/brew_cask_dependency no longer crash on modern brew cask hint (oopsh 1.1.2) |
 | [#941](https://github.com/nvbn/thefuck/issues/941) | Add support for brew command not found | install | to re-check |  |
 | [#943](https://github.com/nvbn/thefuck/issues/943) | Detect derivates of the rm  / | other | to re-check |  |
 | [#945](https://github.com/nvbn/thefuck/issues/945) | snap remove correction suggest installing snap instead of using sudo | install | to re-check |  |
@@ -165,7 +165,7 @@ Every issue that was open on [nvbn/thefuck](https://github.com/nvbn/thefuck/issu
 | [#1008](https://github.com/nvbn/thefuck/issues/1008) | thefuck won't run at all | other | to re-check |  |
 | [#1011](https://github.com/nvbn/thefuck/issues/1011) | Command expecting a tty fail to be rerun correctly | shell:zsh | to re-check |  |
 | [#1026](https://github.com/nvbn/thefuck/issues/1026) | AccessDenied after quitting "sudo su" | windows | to re-check |  |
-| [#1034](https://github.com/nvbn/thefuck/issues/1034) | No results for a npm global install missing sudo | install | to re-check |  |
+| [#1034](https://github.com/nvbn/thefuck/issues/1034) | No results for a npm global install missing sudo | install | works | suggests `sudo npm i -g` |
 | [#1035](https://github.com/nvbn/thefuck/issues/1035) | Windows cmd support | windows | to re-check |  |
 | [#1040](https://github.com/nvbn/thefuck/issues/1040) | ProcessNotFound on zsh in Virtual archlinux | shell:zsh | to re-check |  |
 | [#1073](https://github.com/nvbn/thefuck/issues/1073) | Order suggestions based on suggesttions selected earlier | windows | to re-check |  |
@@ -175,13 +175,13 @@ Every issue that was open on [nvbn/thefuck](https://github.com/nvbn/thefuck/issu
 | [#1112](https://github.com/nvbn/thefuck/issues/1112) | [Bug] Key error when running thefuck on termux | other | to re-check | psutil on Android/Termux |
 | [#1126](https://github.com/nvbn/thefuck/issues/1126) | thefuck doesn't ask for confirmation when fixing `reboot` | shell:zsh | to re-check |  |
 | [#1136](https://github.com/nvbn/thefuck/issues/1136) | error on termux | other | to re-check | psutil on Android/Termux |
-| [#1144](https://github.com/nvbn/thefuck/issues/1144) | correct 'cask reinstall' to 'brew cask reinstall' instead of 'brew cask install' | install | to re-check |  |
+| [#1144](https://github.com/nvbn/thefuck/issues/1144) | correct 'cask reinstall' to 'brew cask reinstall' instead of 'brew cask install' | install | fixed | new `brew_cask` rule: `brew cask reinstall X`→`brew reinstall --cask X` (oopsh 1.1.2) |
 | [#1169](https://github.com/nvbn/thefuck/issues/1169) | Working fine, but will automatically open ".zshrc" file every time | performance | to re-check |  |
-| [#1172](https://github.com/nvbn/thefuck/issues/1172) | Commands with variable definition are not matched by most rules | install | to re-check |  |
+| [#1172](https://github.com/nvbn/thefuck/issues/1172) | Commands with variable definition are not matched by most rules | install | fixed | commands prefixed with `VAR=val` are matched again (oopsh 1.1.2) |
 | [#1177](https://github.com/nvbn/thefuck/issues/1177) | Feature Request: rvm | install | to re-check |  |
 | [#1189](https://github.com/nvbn/thefuck/issues/1189) | EOL (end of line) issue on windows | windows | to re-check |  |
 | [#1195](https://github.com/nvbn/thefuck/issues/1195) | The Fuck Does not Respect Aliases in Shell | shell:zsh | to re-check |  |
-| [#1229](https://github.com/nvbn/thefuck/issues/1229) | sudo.py assumes && for shell 'and' | shell:fish | to re-check | fish 3.0+ supports && |
+| [#1229](https://github.com/nvbn/thefuck/issues/1229) | sudo.py assumes && for shell 'and' | shell:fish | works | fish 3.0+ supports && |
 | [#1230](https://github.com/nvbn/thefuck/issues/1230) | Command Format | shell:zsh | to re-check |  |
 | [#1237](https://github.com/nvbn/thefuck/issues/1237) | what to delete to reset/clear/remove "profile" | windows | to re-check |  |
 | [#1257](https://github.com/nvbn/thefuck/issues/1257) | Different rule found when using fish vs bash/zsh | windows | to re-check |  |
@@ -189,7 +189,7 @@ Every issue that was open on [nvbn/thefuck](https://github.com/nvbn/thefuck/issu
 | [#1268](https://github.com/nvbn/thefuck/issues/1268) | Getting `nologin git push` when pushing to a git branch without upstream | shell:zsh | to re-check |  |
 | [#1269](https://github.com/nvbn/thefuck/issues/1269) | Gnome gets stuck on a login loop with pip version of thefuck | install | to re-check |  |
 | [#1273](https://github.com/nvbn/thefuck/issues/1273) | [SUGGESTION] Bash "command_not_found_handle" function replacement | install | to re-check |  |
-| [#1278](https://github.com/nvbn/thefuck/issues/1278) | git push not getting the upstream branch with aliased git | shell:zsh | to re-check |  |
+| [#1278](https://github.com/nvbn/thefuck/issues/1278) | git push not getting the upstream branch with aliased git | shell:zsh | fixed | commands prefixed with wrappers like `noglob` are matched again (oopsh 1.1.2) |
 | [#1296](https://github.com/nvbn/thefuck/issues/1296) | pnpm does not work | windows | to re-check |  |
 | [#1322](https://github.com/nvbn/thefuck/issues/1322) | [suggestion] correcting commands from the wrong platform | install | to re-check |  |
 | [#1330](https://github.com/nvbn/thefuck/issues/1330) | Quote URLs if zsh is used | shell:zsh | to re-check |  |
@@ -212,7 +212,7 @@ Every issue that was open on [nvbn/thefuck](https://github.com/nvbn/thefuck/issu
 | [#1401](https://github.com/nvbn/thefuck/issues/1401) | Instant mode crashes KDE Plasma on login | instant-mode | to re-check |  |
 | [#1403](https://github.com/nvbn/thefuck/issues/1403) | Command takes 6 seconds, then doesn't find the correction | shell:zsh | to re-check |  |
 | [#1411](https://github.com/nvbn/thefuck/issues/1411) | subprocess.run does not work inside side_effect | other | to re-check |  |
-| [#1420](https://github.com/nvbn/thefuck/issues/1420) | [Suggestion] Correct pip remove, delete to uninstall | install | to re-check |  |
+| [#1420](https://github.com/nvbn/thefuck/issues/1420) | [Suggestion] Correct pip remove, delete to uninstall | install | works | suggests `pip uninstall` |
 | [#1421](https://github.com/nvbn/thefuck/issues/1421) | How about adding a typo correction rule related to 'nvm'? | windows | to re-check |  |
 | [#1422](https://github.com/nvbn/thefuck/issues/1422) | Request for adding Pull Request Template | performance | to re-check |  |
 | [#1423](https://github.com/nvbn/thefuck/issues/1423) | I can't run thefuck on powershell | install | to re-check |  |
@@ -238,7 +238,7 @@ Every issue that was open on [nvbn/thefuck](https://github.com/nvbn/thefuck/issu
 | [#1492](https://github.com/nvbn/thefuck/issues/1492) | `No fuck given` when i run `fuck` with a typo on the last prompt | other | to re-check |  |
 | [#1495](https://github.com/nvbn/thefuck/issues/1495) | Instand mode doesn't work with omp (oh-my-posh) | performance | to re-check |  |
 | [#1496](https://github.com/nvbn/thefuck/issues/1496) | error from thefuck when resizing terminal window | other | to re-check |  |
-| [#1500](https://github.com/nvbn/thefuck/issues/1500) | No fucks given for homebrew update command | other | to re-check | the rule matches; rerunning `brew update` exceeds the 3 s timeout, and recent Homebrew runs the upgrade itself |
+| [#1500](https://github.com/nvbn/thefuck/issues/1500) | No fucks given for homebrew update command | other | works | the rule matches; rerunning `brew update` exceeds the 3 s timeout, and recent Homebrew runs the upgrade itself |
 | [#1502](https://github.com/nvbn/thefuck/issues/1502) | fish issue on termux with psutil | other | to re-check |  |
 | [#1504](https://github.com/nvbn/thefuck/issues/1504) | ~100ms Impact on Zsh Startup | install | to re-check |  |
 | [#1509](https://github.com/nvbn/thefuck/issues/1509) | `psutil.AccessDenied` and `PermissionError` after exiting `sudo su` | other | to re-check |  |
